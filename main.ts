@@ -9,9 +9,9 @@ export default class ChatViewPlugin extends Plugin {
 			for (const line of lines) {
 				const components = line.substring(1).split("|");
 				if (components.length > 0) {
-					const header = components.length > 1 ? components[0] : "";
-					const message = components.length > 1 ? components[1] : components[0];
-					const subtext = components.length > 2 ? components[2] : "";
+					const header = components.length > 1 ? components[0].trim() : "";
+					const message = components.length > 1 ? components[1].trim() : components[0].trim();
+					const subtext = components.length > 2 ? components[2].trim() : "";
 					this.chatBubble(element, header, message, subtext, KEY_MAP[line.charAt(0)]);
 				}
 			}
