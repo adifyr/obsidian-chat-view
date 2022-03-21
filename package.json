@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
-	"version": "1.0.1",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"name": "obsidian-chat-view",
+	"version": "0.1.0",
+	"description": "Chat View allows you to create an elegant Chat UI in Obsidian markdown files.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",

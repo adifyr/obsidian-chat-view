@@ -1,4 +1,72 @@
-/* Sets all the text color to red! */
-body {
-    color: red;
+h4.chat-view-header {
+    margin: 0;
+    margin-bottom: 12px;
+}
+
+p.chat-view-message {
+    margin: 0;
+    line-height: 1.8;
+}
+
+sub.chat-view-subtext {
+    margin-top: 8px;
+    opacity: 0.5;
+}
+
+div.chat-view-bubble {
+    width: fit-content;
+    max-width: 70%;
+    min-width: 30%;
+    padding: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+div.chat-view-align-left {
+    margin-left: 16px;
+    margin-right: auto;
+}
+
+div.chat-view-align-right {
+    margin-left: auto;
+    margin-right: 16px;
+}
+
+div.chat-view-align-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h4.chat-view-blue {
+    color: #47F;
+}
+
+h4.chat-view-green {
+    color: #2B5;
+}
+
+h4.chat-view-yellow {
+    color: #ED0;
+}
+
+h4.chat-view-orange {
+    color: #F90;
+}
+
+h4.chat-view-red {
+    color: #F34;
+}
+
+h4.chat-view-purple {
+    color: #C2C;
+}
+
+h4.chat-view-cyan {
+    color: #0DF;
+}
+
+h4.chat-view-grey {
+    color: #999;
 }
