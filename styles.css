@@ -19,7 +19,7 @@ div.chat-view-bubble {
     min-width: 30%;
     padding: 12px;
     background-color: rgba(0, 0, 0, 0.05);
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
     margin-top: 12px;
     margin-bottom: 12px;

@@ -5,7 +5,7 @@ const KEY_MAP: Record<string, string> = {">": "left", "<": "right", "^": "center
 export default class ChatViewPlugin extends Plugin {
 	override async onload(): Promise<void> {
 		this.registerMarkdownCodeBlockProcessor("chat", (source, element, _) => {
-			const lines = source.split("\n").filter((line) => /(^>|<|\^)|/.test(line.trim()));
+			const lines = source.split("\n").filter((line) => /^>|<|\^/.test(line.trim()));
 			for (const line of lines) {
 				const components = line.substring(1).split("|");
 				if (components.length > 0) {
