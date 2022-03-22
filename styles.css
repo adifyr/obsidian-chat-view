@@ -1,6 +1,6 @@
 h4.chat-view-header {
     margin: 0;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 p.chat-view-message {
@@ -9,7 +9,7 @@ p.chat-view-message {
 }
 
 sub.chat-view-subtext {
-    margin-top: 8px;
+    margin-top: 12px;
     opacity: 0.5;
 }
 
@@ -17,21 +17,22 @@ div.chat-view-bubble {
     width: fit-content;
     max-width: 70%;
     min-width: 30%;
-    padding: 16px;
-    border: 2px solid rgba(255, 255, 255, 0.15);
+    padding: 12px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
-    margin-top: 16px;
-    margin-bottom: 16px;
+    margin-top: 12px;
+    margin-bottom: 12px;
 }
 
 div.chat-view-align-left {
-    margin-left: 16px;
+    margin-left: 0px;
     margin-right: auto;
 }
 
 div.chat-view-align-right {
     margin-left: auto;
-    margin-right: 16px;
+    margin-right: 0px;
 }
 
 div.chat-view-align-center {
