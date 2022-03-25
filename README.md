@@ -66,6 +66,9 @@ The above code will generate the following Chat View:
 
 ![Chat View Preview 4](images/chatview_preview4.jpg)
 
+## Settings
+
+
 
 ## Thank you for reading!
 
