@@ -6,23 +6,26 @@ const COLORS = [ "red", "yellow", "blue", "purple", "green", "grey" ];
 export default class ChatViewPlugin extends Plugin {
 	override async onload(): Promise<void> {
 		this.registerMarkdownCodeBlockProcessor("chat", (source, element, _) => {
-			const rawLines = source.split("\n").filter((line) => /(^>|<|\^)|\.\.\.|(^\[$\])/.test(line.trim()));
+			const rawLines = source.split("\n").filter((line) => /(^>|<|\^)|...|\[(.*?)\]|^#/.test(line.trim()));
 			const lines = rawLines.map((rawLine) => rawLine.trim());
 			const colorConfigs = new Map<string, string>();
 			for (const line of lines) {
-				const config = line.replace(/\[|\]/, "").split("=").map((str) => str.trim());
-				if (/^\[$\]/.test(line)) {
-					if (COLORS.contains(config[ 1 ])) {
-						colorConfigs.set(config[ 0 ], config[ 1 ]);
+				if (/\[(.*?)\]/.test(line)) {
+					const configs = line.replace("[", "").replace("]", "").split(",").map((l) => l.trim());
+					for (const config of configs) {
+						const entry = config.split("=").map((c) => c.trim());
+						if (COLORS.contains(entry[ 1 ])) colorConfigs.set(entry[ 0 ], entry[ 1 ]);
 					}
 				}
 			}
 			console.log(colorConfigs);
 			for (let index = 0; index < lines.length; index++) {
-				const line = lines[ index ];
-				if (line === "...") {
+				const line = lines[ index ].trim();
+				if (/^#/.test(line)) {
+					element.createEl("p", {text: line.substring(1).trim(), cls: [ "chat-view-comment" ]})
+				} else if (line === "...") {
 					this.createDelimiter(element);
-				} else {
+				} else if (/^>|<|\^/.test(line)) {
 					const components = line.substring(1).split("|");
 					if (components.length > 0) {
 						const header = components.length > 1 && /[a-zA-Z0-9]/.test(components[ 0 ])
@@ -58,9 +61,7 @@ export default class ChatViewPlugin extends Plugin {
 			],
 		});
 		if (header.length > 0) bubble.createEl("h4", {
-			text: header, cls: [
-				"chat-view-header", `chat-view-${ colorConfigs.get(header) }`
-			]
+			text: header, cls: [ "chat-view-header", `chat-view-${ colorConfigs.get(header) }` ]
 		});
 		if (message.length > 0) bubble.createEl("p", {text: message, cls: [ "chat-view-message" ]});
 		if (subtext.length > 0) bubble.createEl("sub", {text: subtext, cls: [ "chat-view-subtext" ], });
