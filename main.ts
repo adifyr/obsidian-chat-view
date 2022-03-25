@@ -1,10 +1,22 @@
 import {Plugin} from "obsidian";
+import {ChatViewSettingsTab} from "settings";
 
-const KEYMAP: Record<string, string> = {">": "left", "<": "right", "^": "center"};
+const KEYMAP: Record<string, string> = {">": "right", "<": "left", "^": "center"};
+const REVERSED_KEYMAP: Record<string, string> = {">": "left", "<": "right", "^": "center"};
 const COLORS = [ "red", "yellow", "blue", "purple", "green", "grey" ];
 
+interface ChatViewPluginSettings {
+	reverse: boolean;
+}
+
+const DEFAULT_SETTINGS: Partial<ChatViewPluginSettings> = {reverse: false};
+
 export default class ChatViewPlugin extends Plugin {
+	settings: ChatViewPluginSettings;
+
 	override async onload(): Promise<void> {
+		await this.loadSettings();
+		this.addSettingTab(new ChatViewSettingsTab(this.app, this));
 		this.registerMarkdownCodeBlockProcessor("chat", (source, element, _) => {
 			const rawLines = source.split("\n").filter((line) => /(^>|<|\^)|...|\[(.*?)\]|^#/.test(line.trim()));
 			const lines = rawLines.map((rawLine) => rawLine.trim());
@@ -34,12 +46,22 @@ export default class ChatViewPlugin extends Plugin {
 						const subtext = components.length > 2 ? components[ 2 ].trim() : "";
 						const continued = index > 0 && line.charAt(0) === lines[ index - 1 ].charAt(0);
 						this.createChatBubble(
-							header, message, subtext, KEYMAP[ line.charAt(0) ], element, continued, colorConfigs
+							header, message, subtext,
+							(this.settings.reverse ? KEYMAP : REVERSED_KEYMAP)[ line.charAt(0) ],
+							element, continued, colorConfigs
 						);
 					}
 				}
 			}
 		});
+	}
+
+	async loadSettings() {
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+	}
+
+	async saveSettings() {
+		await this.saveData(this.settings);
 	}
 
 	createDelimiter(element: HTMLElement) {
