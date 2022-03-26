@@ -1,23 +1,12 @@
 import {Plugin} from "obsidian";
-import {ChatViewSettingsTab} from "settings";
 
 const KEYMAP: Record<string, string> = {">": "right", "<": "left", "^": "center"};
-const REVERSED_KEYMAP: Record<string, string> = {">": "left", "<": "right", "^": "center"};
 const COLORS = [ "red", "yellow", "blue", "purple", "green", "grey" ];
 
-interface ChatViewPluginSettings {
-	reverse: boolean;
-}
-
-const DEFAULT_SETTINGS: Partial<ChatViewPluginSettings> = {reverse: false};
-
 export default class ChatViewPlugin extends Plugin {
-	settings: ChatViewPluginSettings;
 
 	override async onload(): Promise<void> {
-		await this.loadSettings();
-		this.addSettingTab(new ChatViewSettingsTab(this.app, this));
-		this.registerMarkdownCodeBlockProcessor("chat", (source, element, _) => {
+		this.registerMarkdownCodeBlockProcessor("chat", (source, element, ctx) => {
 			const rawLines = source.split("\n").filter((line) => /(^>|<|\^)|...|\[(.*?)\]|^#/.test(line.trim()));
 			const lines = rawLines.map((rawLine) => rawLine.trim());
 			const colorConfigs = new Map<string, string>();
@@ -30,7 +19,6 @@ export default class ChatViewPlugin extends Plugin {
 					}
 				}
 			}
-			console.log(colorConfigs);
 			for (let index = 0; index < lines.length; index++) {
 				const line = lines[ index ].trim();
 				if (/^#/.test(line)) {
@@ -44,26 +32,16 @@ export default class ChatViewPlugin extends Plugin {
 							? components[ 0 ].trim() : "";
 						const message = components.length > 1 ? components[ 1 ].trim() : components[ 0 ].trim();
 						const subtext = components.length > 2 ? components[ 2 ].trim() : "";
-						const continued = index > 0 && line.charAt(0) === lines[ index - 1 ].charAt(0);
+						const continued = index > 0 && line.charAt(0) === lines[ index - 1 ].charAt(0)
+							&& header.length === 0;
 						this.createChatBubble(
-							header, message, subtext,
-							(this.settings.reverse ? KEYMAP : REVERSED_KEYMAP)[ line.charAt(0) ],
-							element, continued, colorConfigs
+							header, message, subtext, KEYMAP[ line.charAt(0) ], element, continued, colorConfigs
 						);
 					}
 				}
 			}
 		});
 	}
-
-	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	}
-
-	async saveSettings() {
-		await this.saveData(this.settings);
-	}
-
 	createDelimiter(element: HTMLElement) {
 		const delimiter = element.createDiv({cls: [ "delimiter" ]});
 		for (let i = 0; i < 3; i++) {
