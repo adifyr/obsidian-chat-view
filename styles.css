@@ -17,8 +17,9 @@ p.chat-view-message {
 p.chat-view-comment {
     width: fit-content;
     max-width: 75%;
-    text-align: center;
     margin: 24px auto;
+    line-height: 1.8;
+    text-align: center;
     opacity: var(--opacity);
 }
 
