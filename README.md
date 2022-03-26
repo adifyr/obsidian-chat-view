@@ -5,7 +5,7 @@ Chat View let's you quickly and easily create elegant Chat UIs in your Markdown 
 
 ## Usage
 
-Every chat message must be prefixed with a `'<'`, `'>'` or `'^'` for left, right & center aligning the messages respectively (The direction of the chat messages denoted by the `'<'` and `'>'` arrows can be reversed in the plugin settings). Each chat message consists of 3 parts: The header, message and the subtext. The parts are separated by a `'|'` character. Take a look at the example below to see how it works:
+Every chat message must be prefixed with a `'<'`, `'>'` or `'^'` for left, right & center aligning the messages respectively. Each chat message consists of 3 parts: The header, message and the subtext. The parts are separated by a `'|'` character. Take a look at the example below to see how it works:
 ~~~
 ```chat
 > Fitzwilliam Darcy | I've fought against my judgement, my family's expectations... The inferiority of your birth, my rank and circumstance. | 23rd July, 1846 at 5:42 PM
@@ -65,10 +65,6 @@ To add that last bit of organization & pizazz, the plugin also includes the abil
 The above code will generate the following Chat View:
 
 ![Chat View Preview 4](images/chatview_preview4.jpg)
-
-## Settings
-
-The plugin currently has a single setting that allows you to reverse the direction of the chat messages denoted by the `'<'` and `'>'` arrows. By default, the `'<'` arrow denotes a left aligned message and the `'>'` denotes a right aligned one.
 
 ## Thank you for reading!
 
