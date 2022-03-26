@@ -5,10 +5,12 @@
 h4.chat-view-header {
     margin: 0;
     margin-bottom: 8px;
+    font-size: larger;
 }
 
 p.chat-view-message {
     margin: 0;
+    margin-bottom: 2px;
     line-height: 1.8;
 }
 
@@ -21,7 +23,6 @@ p.chat-view-comment {
 }
 
 sub.chat-view-subtext {
-    margin-top: 16px;
     opacity: var(--opacity);
 }
 
