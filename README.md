@@ -68,4 +68,4 @@ The above code will generate the following Chat View:
 
 ## Thank you for reading!
 
-This project is available under the [MIT License](LICENSE).
+This project is published under the [MIT License](LICENSE).
