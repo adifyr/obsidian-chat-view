@@ -47,8 +47,10 @@ export default class ChatViewPlugin extends Plugin {
 	) {
 		const marginClass = continued ? "chat-view-small-vertical-margin" : "chat-view-default-vertical-margin";
 		const colorConfigClass = `chat-view-${ colorConfigs.get(header) }`;
-		const bubble = element.createDiv({cls: [ "chat-view-bubble", `chat-view-align-${ align }`, marginClass ]});
-		if (header.length > 0) bubble.createEl("h4", {text: header, cls: [ "chat-view-header", colorConfigClass ]});
+		const bubble = element.createDiv({
+			cls: [ "chat-view-bubble", `chat-view-align-${ align }`, marginClass, colorConfigClass ]
+		});
+		if (header.length > 0) bubble.createEl("h4", {text: header, cls: [ "chat-view-header" ]});
 		if (message.length > 0) bubble.createEl("p", {text: message, cls: [ "chat-view-message" ]});
 		if (subtext.length > 0) bubble.createEl("sub", {text: subtext, cls: [ "chat-view-subtext" ], });
 	}

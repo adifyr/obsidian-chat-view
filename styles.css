@@ -77,30 +77,30 @@ div.delimiter div.dot {
     opacity: var(--opacity);
 }
 
-h4.chat-view-blue {
+div.chat-view-blue h4.chat-view-header {
     color: #47F;
 }
 
-h4.chat-view-green {
+div.chat-view-green h4.chat-view-header {
     color: #2B5;
 }
 
-h4.chat-view-yellow {
+div.chat-view-yellow h4.chat-view-header {
     color: #ED0;
 }
 
-h4.chat-view-orange {
+div.chat-view-orange h4.chat-view-header {
     color: #F90;
 }
 
-h4.chat-view-red {
+div.chat-view-red h4.chat-view-header {
     color: #F34;
 }
 
-h4.chat-view-purple {
+div.chat-view-purple h4.chat-view-header {
     color: #C2C;
 }
 
-h4.chat-view-grey {
+div.chat-view-grey h4.chat-view-header {
     color: #999;
 }
