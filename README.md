@@ -22,7 +22,7 @@ You can add delimiters to your chat view simply by entering `'...'` on a line. T
 ~~~
 ```chat
 < Fitzwilliam Darcy | Just listen to me, all right? You simply cannot fathom the amount of courage I've had to muster to say this.
-# Lizzie gazed at Darcy with a baffled look on her face. He was now sweating profusely.
+# Lizzie gazed at Darcy with a baffled look on her face. Darcy was now sweating profusely. This only unsettled her even more. What was happening?
 > Elizabeth Bennett | Mr. Darcy, are you all right? Why did you come here?
 ...
 < Fitzwilliam Darcy | I came here to tell you that I'm in love with you. I'm deeply, unabashedly, utterly in love with you.
