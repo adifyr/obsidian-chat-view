@@ -50,7 +50,7 @@ Will result in the Chat View seen below:
 To add that last bit of organization & pizazz, the plugin also includes the ability to customize the formatting of the chat bubble's header - namely the size & color. Here's how you can do it.
 
 - ### Header Size
-    Chat View allows you to choose from 5 different sizes for your Chat Bubble's header: `[h2, h3, h4, h5, h6]`. This can be done by simply adding the following config line to your code block: `{header=<hx>}`.
+    Chat View allows you to choose from 5 different sizes for your Chat Bubble's header: `[h2, h3, h4, h5, h6]`. This can be done by simply adding the following config line to your code block: `{header=<hX>}`.
 
 - ### Header Color
     You can also change the color of headers speaker-wise. You may choose from upto 10 colors: `[red, green, blue, yellow, orange, purple, grey, brown, indigo, teal]`. This can be done by adding a color configuration like this to your code block: `[Person Name=color, Person Name=color]`.
