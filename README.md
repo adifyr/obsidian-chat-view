@@ -46,19 +46,25 @@ Will result in the Chat View seen below:
 
 ![Chat View Preview 3](images/chatview_preview3.jpg)
 
-## Colored Headers
-To add that last bit of organization & pizazz, the plugin also includes the ability to color-code headers. You may choose from 7 colors to style your headers: `[red, green, yellow, blue, purple, orange, grey]`. How is this done? Simply add the following mapping anywhere in your code:
+## Customize Header Formatting
+To add that last bit of organization & pizazz, the plugin also includes the ability to customize the formatting of the chat bubble's header - namely the size & color. Here's how you can do it.
 
-`[Person Name=color, Other Person Name=color]`. As is done in the code you see below:
+- ### Header Size
+    Chat View allows you to choose from 5 different sizes for your Chat Bubble's header: `[h2, h3, h4, h5, h6]`. This can be done by simply adding the following config line to your code block: `{header=<hX>}`.
 
+- ### Header Color
+    You can also change the color of headers speaker-wise. You may choose from upto 10 colors: `[red, green, blue, yellow, orange, purple, grey, brown, indigo, teal]`. This can be done by adding a color configuration like this to your code block: `[Person Name=color, Person Name=color]`.
+
+The below example portrays how both of these work in tandem.
 ~~~
 ```chat
-[Elizabeth Bennett=green, Fitzwilliam Darcy=yellow]
+{header=h3}
+[Elizabeth Bennett=blue, Fitzwilliam Darcy=yellow]
 
 > Elizabeth Swann | I... But what about... You can't be serious, Mr. Darcy. This is preposterous. After all we've been through, I thought...
 > | Yes. I will marry you. | 23rd July, 1846 at 6:02 PM.
 # Darcy had no words left. They'd reached a point beyond all mannerisms, all formalities. All that was left was raw love. Only it could speak next.
-< Fitzwilliam Darcy | I love you Elizabeth. With all my heart. And I will do so for as long as we shall be together. | 23rd July, 1846 at 6:04 PM.
+< Fitzwilliam Darcy | I love you Lizzie. With all my heart. And I will do so for as long as we shall be together. | 23rd July, 1846 at 6:04 PM.
 ```
 ~~~
 
