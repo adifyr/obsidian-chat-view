@@ -1,48 +1,55 @@
 :root {
     --opacity: 0.6;
+    --line-height: 1.8;
 }
 
-h4.chat-view-header {
+h2.chat-view-header, h3.chat-view-header, h4.chat-view-header, h5.chat-view-header, h6.chat-view-header {
     margin: 0;
     margin-bottom: 8px;
-    font-size: larger;
 }
 
-p.chat-view-message {
+.chat-view-message {
     margin: 0;
     margin-bottom: 2px;
-    line-height: 1.8;
+    line-height: var(--line-height);
 }
 
-p.chat-view-comment {
+.chat-view-comment {
     width: fit-content;
-    max-width: 75%;
+    max-width: 90%;
     margin: 24px auto;
-    line-height: 1.8;
+    line-height: var(--line-height);
     text-align: center;
     opacity: var(--opacity);
 }
 
-sub.chat-view-subtext {
+.chat-view-subtext {
     opacity: var(--opacity);
 }
 
 div.chat-view-bubble {
     width: fit-content;
-    max-width: 70%;
     min-width: 30%;
     padding: 12px;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.075);
     border: 2px solid rgba(255, 255, 255, 0.15);
     border-radius: 16px;
 }
 
+.chat-view-mobile-width {
+    max-width: 90%;
+}
+
+.chat-view-desktop-width {
+    max-width: 75%;
+}
+
 div.chat-view-default-vertical-margin {
-    margin-top: 16px;
+    margin-top: 18px;
 }
 
 div.chat-view-small-vertical-margin {
-    margin-top: 8px;
+    margin-top: 12px;
 }
 
 div.chat-view-align-left {
@@ -66,7 +73,7 @@ div.delimiter {
     width: fit-content;
     margin: 24px auto;
 }
-  
+
 div.delimiter div.dot {
     display: inline-block;
     width: 6px;
@@ -77,30 +84,42 @@ div.delimiter div.dot {
     opacity: var(--opacity);
 }
 
-div.chat-view-blue h4.chat-view-header {
-    color: #47F;
+div.chat-view-blue .chat-view-header {
+    color: #08E;
 }
 
-div.chat-view-green h4.chat-view-header {
+div.chat-view-green .chat-view-header {
     color: #2B5;
 }
 
-div.chat-view-yellow h4.chat-view-header {
+div.chat-view-yellow .chat-view-header {
     color: #ED0;
 }
 
-div.chat-view-orange h4.chat-view-header {
-    color: #F90;
+div.chat-view-orange .chat-view-header {
+    color: #F80;
 }
 
-div.chat-view-red h4.chat-view-header {
-    color: #F34;
+div.chat-view-red .chat-view-header {
+    color: #F33;
 }
 
-div.chat-view-purple h4.chat-view-header {
-    color: #C2C;
+div.chat-view-purple .chat-view-header {
+    color: #B2C;
 }
 
-div.chat-view-grey h4.chat-view-header {
+div.chat-view-grey .chat-view-header {
     color: #999;
+}
+
+div.chat-view-brown .chat-view-header {
+    color: #A71;
+}
+
+div.chat-view-indigo .chat-view-header {
+    color: #75F;
+}
+
+div.chat-view-teal .chat-view-header {
+    color: #099;
 }
