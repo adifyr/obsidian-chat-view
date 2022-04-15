@@ -59,13 +59,12 @@ The below example portrays how both of these work in tandem.
 ~~~
 ```chat
 {header=h3}
-[Darius Malfoy=teal, Harry Potter=orange]
+[Elizabeth Bennett=blue, Fitzwilliam Darcy=yellow]
 
-< Harry Potter | It doesn't matter who they are. You don't get sorted into your house based on magical powers, but your traits.
-< | At the end of the day, even they're true Slytherins. They have the same pride, the same cunning, the same ambition that you have. Convince them of that, and they will stand with you. | 23rd May, 2026 at 5:17 PM
-...
-> Darius Malfoy | I really don't understand why we have to coddle these muggles. I mean, we accept them now. Isn't that enough?
-> | What do you want us to do, roll down a red carpet for them? Become their servants for an hour every day? | 23rd May, 2026 at 5:18 PM
+> Elizabeth Swann | I... But what about... You can't be serious, Mr. Darcy. This is preposterous. After all we've been through, I thought...
+> | Yes. I will marry you. | 23rd July, 1846 at 6:02 PM.
+# Darcy had no words left. They'd reached a point beyond all mannerisms, all formalities. All that was left was raw love. Only it could speak next.
+< Fitzwilliam Darcy | I love you Lizzie. With all my heart. And I will do so for as long as we shall be together. | 23rd July, 1846 at 6:04 PM.
 ```
 ~~~
 
