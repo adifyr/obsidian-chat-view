@@ -36,7 +36,9 @@ export default class ChatViewPlugin extends Plugin {
 					const configs = line.replace("[", "").replace("]", "").split(",").map((l) => l.trim());
 					for (const config of configs) {
 						const entry = config.split("=").map((c) => c.trim());
-						if (COLORS.contains(entry[ 1 ])) colorConfigs.set(entry[ 0 ], entry[ 1 ]);
+						if (entry[ 0 ].length > 0 && COLORS.contains(entry[ 1 ])) {
+							colorConfigs.set(entry[ 0 ], entry[ 1 ]);
+						}
 					}
 				}
 			}
@@ -51,12 +53,15 @@ export default class ChatViewPlugin extends Plugin {
 					const components = line.substring(1).split("|");
 					if (components.length > 0) {
 						const first = components[ 0 ];
-						const head = components.length > 1 && /[a-zA-Z0-9]/.test(first) ? first.trim() : "";
-						const msg = components.length > 1 ? components[ 1 ].trim() : first.trim();
-						const sub = components.length > 2 ? components[ 2 ].trim() : "";
-						const continued = index > 0 && line.charAt(0) === lines[ index - 1 ].charAt(0) && head === "";
+						const header = components.length > 1 ? first.trim() : "";
+						const message = components.length > 1 ? components[ 1 ].trim() : first.trim();
+						const subtext = components.length > 2 ? components[ 2 ].trim() : "";
+						const continued = index > 0 && line.charAt(0) === lines[ index - 1 ].charAt(0) && header === "";
+						const prevComponents = continued ? lines[ index - 1 ].substring(1).split("|") : [];
+						const prevHeader = prevComponents.length > 1 ? prevComponents[ 0 ].trim() : "";
 						this.createChatBubble(
-							head, msg, sub, KEYMAP[ line.charAt(0) ], el, continued, colorConfigs, formatConfigs,
+							header, prevHeader, message, subtext, KEYMAP[ line.charAt(0) ], el, continued,
+							colorConfigs, formatConfigs,
 						);
 					}
 				}
@@ -66,6 +71,7 @@ export default class ChatViewPlugin extends Plugin {
 
 	private createChatBubble(
 		header: string,
+		prevHeader: string,
 		message: string,
 		subtext: string,
 		align: string,
@@ -74,8 +80,12 @@ export default class ChatViewPlugin extends Plugin {
 		colorConfigs: Map<string, string>,
 		formatConfigs: Map<string, string>,
 	) {
+		console.log({
+			"message": message,
+			"prev_header": prevHeader,
+		});
 		const marginClass = continued ? "chat-view-small-vertical-margin" : "chat-view-default-vertical-margin";
-		const colorConfigClass = `chat-view-${ colorConfigs.get(header) }`;
+		const colorConfigClass = `chat-view-${ colorConfigs.get(continued ? prevHeader : header) }`;
 		const widthClass = Platform.isMobile ? "chat-view-mobile-width" : "chat-view-desktop-width";
 		const headerEl: keyof HTMLElementTagNameMap = formatConfigs.has("header") ?
 			formatConfigs.get("header") as keyof HTMLElementTagNameMap :
