@@ -85,7 +85,8 @@ export default class ChatViewPlugin extends Plugin {
 			"prev_header": prevHeader,
 		});
 		const marginClass = continued ? "chat-view-small-vertical-margin" : "chat-view-default-vertical-margin";
-		const colorConfigClass = `chat-view-${ colorConfigs.get(continued ? prevHeader : header) }`;
+		const colorConfigClass =
+			`chat-view-${ colorConfigs.get(continued && prevHeader.length > 0 ? prevHeader : header) }`;
 		const widthClass = Platform.isMobile ? "chat-view-mobile-width" : "chat-view-desktop-width";
 		const headerEl: keyof HTMLElementTagNameMap = formatConfigs.has("header") ?
 			formatConfigs.get("header") as keyof HTMLElementTagNameMap :
