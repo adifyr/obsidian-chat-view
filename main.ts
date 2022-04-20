@@ -3,6 +3,7 @@ import {Plugin, Platform} from "obsidian";
 const KEYMAP: Record<string, string> = {">": "right", "<": "left", "^": "center"};
 const COLORS = [ "red", "orange", "yellow", "green", "blue", "purple", "grey", "brown", "indigo", "teal" ];
 const HEADERS = [ "h2", "h3", "h4", "h5", "h6" ];
+const MAX_WIDTHS = [ "50", "55", "60", "65", "70", "75", "80", "85", "90" ];
 
 class ChatPatterns {
 	static readonly message = /(^>|<|\^)/;
@@ -30,6 +31,8 @@ export default class ChatViewPlugin extends Plugin {
 						const entry = config.split("=").map((c) => c.trim());
 						if (entry[ 0 ] == "header" && HEADERS.contains(entry[ 1 ])) {
 							formatConfigs.set("header", entry[ 1 ]);
+						} else if (entry[ 0 ] == "mw" && MAX_WIDTHS.contains(entry[ 1 ])) {
+							formatConfigs.set("mw", entry[ 1 ]);
 						}
 					}
 				} else if (ChatPatterns.colors.test(line)) {
@@ -42,6 +45,7 @@ export default class ChatViewPlugin extends Plugin {
 					}
 				}
 			}
+			let continuedCount = 0;
 			for (let index = 0; index < lines.length; index++) {
 				const line = lines[ index ].trim();
 				if (ChatPatterns.comment.test(line)) {
@@ -57,8 +61,14 @@ export default class ChatViewPlugin extends Plugin {
 						const message = components.length > 1 ? components[ 1 ].trim() : first.trim();
 						const subtext = components.length > 2 ? components[ 2 ].trim() : "";
 						const continued = index > 0 && line.charAt(0) === lines[ index - 1 ].charAt(0) && header === "";
-						const prevComponents = continued ? lines[ index - 1 ].substring(1).split("|") : [];
-						const prevHeader = prevComponents.length > 1 ? prevComponents[ 0 ].trim() : "";
+						let prevHeader = "";
+						if (continued) {
+							continuedCount++;
+							const prevComponents = lines[ index - continuedCount ].trim().substring(1).split("|");
+							prevHeader = prevComponents[ 0 ].length > 1 ? prevComponents[ 0 ].trim() : "";
+						} else {
+							continuedCount = 0;
+						}
 						this.createChatBubble(
 							header, prevHeader, message, subtext, KEYMAP[ line.charAt(0) ], el, continued,
 							colorConfigs, formatConfigs,
@@ -80,14 +90,11 @@ export default class ChatViewPlugin extends Plugin {
 		colorConfigs: Map<string, string>,
 		formatConfigs: Map<string, string>,
 	) {
-		console.log({
-			"message": message,
-			"prev_header": prevHeader,
-		});
 		const marginClass = continued ? "chat-view-small-vertical-margin" : "chat-view-default-vertical-margin";
-		const colorConfigClass =
-			`chat-view-${ colorConfigs.get(continued && prevHeader.length > 0 ? prevHeader : header) }`;
-		const widthClass = Platform.isMobile ? "chat-view-mobile-width" : "chat-view-desktop-width";
+		const colorConfigClass = `chat-view-${ colorConfigs.get(continued ? prevHeader : header) }`;
+		const widthClass = formatConfigs.has("mw") ?
+			`chat-view-max-width-${ formatConfigs.get("mw") }`
+			: (Platform.isMobile ? "chat-view-mobile-width" : "chat-view-desktop-width");
 		const headerEl: keyof HTMLElementTagNameMap = formatConfigs.has("header") ?
 			formatConfigs.get("header") as keyof HTMLElementTagNameMap :
 			"h4";
