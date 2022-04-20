@@ -1,7 +1,7 @@
 # Obsidian Chat View Plugin
 Chat View let's you quickly and easily create elegant Chat UIs in your Markdown Files.
 
-![Obsidian Chat View Overview](images/obsidian_chatview_plugin.jpg)
+![Obsidian Chat View Overview](https://github.com/adifyr/obsidian-chat-view/raw/master/images/obsidian_chatview_plugin.jpg)
 
 ## Usage
 
@@ -14,7 +14,7 @@ Every chat message must be prefixed with a `'<'`, `'>'` or `'^'` for left, right
 ~~~
 The above code will generate the following Chat View:
 
-![Chat View Preview 1](images/chatview_preview1.jpg)
+![Chat View Preview 1](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview_preview1.jpg)
 
 ## Add Delimiters & Comments
 You can add delimiters to your chat view simply by entering `'...'` on a line. To add a comment, start a line with the `'#'` character. Take a look at the following example:
@@ -31,7 +31,7 @@ You can add delimiters to your chat view simply by entering `'...'` on a line. T
 
 The above code will generate the following Chat View:
 
-![Chat View Preview 2](images/chatview_preview2.jpg)
+![Chat View Preview 2](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview_preview2.jpg)
 
 As you may have noticed, I've actually left out the subtext from these messages. The Chat View plugin is flexible that way. You can also leave out the header if you like just by starting the message off with the `'|'` character. For example, the following code:
 
@@ -44,7 +44,7 @@ As you may have noticed, I've actually left out the subtext from these messages.
 
 Will result in the Chat View seen below:
 
-![Chat View Preview 3](images/chatview_preview3.jpg)
+![Chat View Preview 3](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview_preview3.jpg)
 
 ## Customization
 To add that last bit of organization & pizazz, the plugin also includes the ability to customize the header size, header colors and maximum width of the chat bubbles. Here's how you can configure each of them for your Chat View:
@@ -73,7 +73,7 @@ The below example showcases how all three of these work in tandem.
 
 The above code will generate the following Chat View:
 
-![Chat View Preview 4](images/chatview_preview4.jpg)
+![Chat View Preview 4](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview_preview4.jpg)
 
 ## Thank you for reading!
 
