@@ -46,8 +46,8 @@ Will result in the Chat View seen below:
 
 ![Chat View Preview 3](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview_preview3.jpg)
 
-## Customize Header Formatting
-To add that last bit of organization & pizazz, the plugin also includes the ability to customize the formatting of the chat bubble's header - namely the size & color. Here's how you can do it.
+## Customization
+To add that last bit of organization & pizazz, the plugin also includes the ability to customize the header size, header colors and maximum width of the chat bubbles. Here's how you can configure each of them for your Chat View:
 
 - ### Header Size
     Chat View allows you to choose from 5 different sizes for your Chat Bubble's header: `[h2, h3, h4, h5, h6]`. This can be done by simply adding the following config line to your code block: `{header=<hX>}`.
@@ -55,10 +55,13 @@ To add that last bit of organization & pizazz, the plugin also includes the abil
 - ### Header Color
     You can also change the color of headers speaker-wise. You may choose from upto 10 colors: `[red, green, blue, yellow, orange, purple, grey, brown, indigo, teal]`. This can be done by adding a color configuration like this to your code block: `[Person Name=color, Person Name=color]`.
 
-The below example portrays how both of these work in tandem.
+- ### Max Width
+    The maximum width of the Chat Bubble can be specified by adding the following to your config line: `{..., mw=width}`. The plugin accepts 9 widths (in percentages) from 50% to 90% at an interval of 5%. Namely: `[50, 55, 60, 65, 70, 75, 80, 85, 90]`.
+
+The below example showcases how all three of these work in tandem.
 ~~~
 ```chat
-{header=h3}
+{header=h3, mw=75}
 [Elizabeth Bennett=blue, Fitzwilliam Darcy=yellow]
 
 > Elizabeth Swann | I... But what about... You can't be serious, Mr. Darcy. This is preposterous. After all we've been through, I thought...

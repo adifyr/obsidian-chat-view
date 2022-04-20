@@ -3,7 +3,11 @@
     --line-height: 1.8;
 }
 
-h2.chat-view-header, h3.chat-view-header, h4.chat-view-header, h5.chat-view-header, h6.chat-view-header {
+h2.chat-view-header,
+h3.chat-view-header,
+h4.chat-view-header,
+h5.chat-view-header,
+h6.chat-view-header {
     margin: 0;
     margin-bottom: 8px;
 }
@@ -37,11 +41,47 @@ div.chat-view-bubble {
 }
 
 .chat-view-mobile-width {
-    max-width: 90%;
+    max-width: 85%;
 }
 
 .chat-view-desktop-width {
     max-width: 75%;
+}
+
+.chat-view-max-width-50 {
+    max-width: 50%;
+}
+
+.chat-view-max-width-55 {
+    max-width: 55%;
+}
+
+.chat-view-max-width-60 {
+    max-width: 60%;
+}
+
+.chat-view-max-width-65 {
+    max-width: 65%;
+}
+
+.chat-view-max-width-70 {
+    max-width: 70%;
+}
+
+.chat-view-max-width-75 {
+    max-width: 75%;
+}
+
+.chat-view-max-width-80 {
+    max-width: 80%;
+}
+
+.chat-view-max-width-85 {
+    max-width: 85%;
+}
+
+.chat-view-max-width-90 {
+    max-width: 90%;
 }
 
 div.chat-view-default-vertical-margin {
