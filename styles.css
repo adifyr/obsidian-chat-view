@@ -125,7 +125,7 @@ div.delimiter div.dot {
 }
 
 div.chat-view-blue .chat-view-header {
-    color: #08E;
+    color: #08F;
 }
 
 div.chat-view-green .chat-view-header {
@@ -162,4 +162,16 @@ div.chat-view-indigo .chat-view-header {
 
 div.chat-view-teal .chat-view-header {
     color: #099;
+}
+
+div.chat-view-pink .chat-view-header {
+    color: #F2A;
+}
+
+div.chat-view-slate .chat-view-header {
+    color: #78A;
+}
+
+div.chat-view-wood .chat-view-header {
+    color: #EE6a44;
 }
