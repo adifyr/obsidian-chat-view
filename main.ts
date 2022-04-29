@@ -3,11 +3,14 @@ import * as webvtt from "node-webvtt";
 
 
 const KEYMAP: Record<string, string> = {">": "right", "<": "left", "^": "center"};
+const CONFIGS: Record<string, string[]> = {
+	"header": ["h2", "h3", "h4", "h5", "h6"],
+	"mw": ["50", "55", "60", "65", "70", "75", "80", "85", "90"],
+	"mode": ["default", "minimal"],
+};
 const COLORS = [
 	"red", "orange", "yellow", "green", "blue", "purple", "grey", "brown", "indigo", "teal", "pink", "slate", "wood"
 ];
-const HEADERS = ["h2", "h3", "h4", "h5", "h6"];
-const MAX_WIDTHS = ["50", "55", "60", "65", "70", "75", "80", "85", "90"];
 
 class ChatPatterns {
 	static readonly message = /(^>|<|\^)/;
@@ -33,14 +36,16 @@ export default class ChatViewPlugin extends Plugin {
 		this.registerMarkdownCodeBlockProcessor("chat-webvtt", (source, el, _) => {
 			const vtt = webvtt.parse(source, {meta: true});
 			const messages: Message[] = [];
-			const self = vtt.meta && "Self" in vtt.meta ? vtt.meta.Self : undefined;
-			console.log(`Self is ${self}`);
+			const self = vtt.meta && "Self" in vtt.meta ? vtt.meta.Self as string : undefined;
+			const selves = self ? self.split(",").map((val) => val.trim()) : undefined;
 
 			const formatConfigs = new Map<string, string>();
 			const maxWidth = vtt.meta && "MaxWidth" in vtt.meta ? vtt.meta.MaxWidth : undefined;
 			const headerConfig = vtt.meta && "Header" in vtt.meta ? vtt.meta.Header : undefined;
-			if (MAX_WIDTHS.contains(maxWidth)) formatConfigs.set("mw", maxWidth);
-			if (HEADERS.contains(headerConfig)) formatConfigs.set("header", headerConfig);
+			const modeConfig = vtt.meta && "Mode" in vtt.meta ? vtt.meta.Mode : undefined;
+			if (CONFIGS["mw"].contains(maxWidth)) formatConfigs.set("mw", maxWidth);
+			if (CONFIGS["header"].contains(headerConfig)) formatConfigs.set("header", headerConfig);
+			if (CONFIGS["mode"].contains(modeConfig)) formatConfigs.set("mode", modeConfig);
 			console.log(formatConfigs);
 
 			for (let index = 0; index < vtt.cues.length; index++) {
@@ -67,7 +72,7 @@ export default class ChatViewPlugin extends Plugin {
 
 			messages.forEach((message, index, arr) => {
 				const prevHeader = index > 0 ? arr[index - 1].header : "";
-				const align = self && message.header === self ? "right" : "left";
+				const align = selves && selves.contains(message.header) ? "right" : "left";
 				const continued = message.header === prevHeader;
 				this.createChatBubble(
 					continued ? "" : message.header, prevHeader, message.body, message.subtext, align, el,
@@ -84,18 +89,14 @@ export default class ChatViewPlugin extends Plugin {
 				if (ChatPatterns.format.test(line)) {
 					const configs = line.replace("{", "").replace("}", "").split(",").map((l) => l.trim());
 					for (const config of configs) {
-						const entry = config.split("=").map((c) => c.trim());
-						if (entry[0] == "header" && HEADERS.contains(entry[1])) {
-							formatConfigs.set("header", entry[1]);
-						} else if (entry[0] == "mw" && MAX_WIDTHS.contains(entry[1])) {
-							formatConfigs.set("mw", entry[1]);
-						}
+						const [k, v] = config.split("=").map((c) => c.trim());
+						if (Object.keys(CONFIGS).contains(k) && CONFIGS[k].contains(v)) formatConfigs.set(k, v);
 					}
 				} else if (ChatPatterns.colors.test(line)) {
 					const configs = line.replace("[", "").replace("]", "").split(",").map((l) => l.trim());
 					for (const config of configs) {
-						const entry = config.split("=").map((c) => c.trim());
-						if (entry[0].length > 0 && COLORS.contains(entry[1])) colorConfigs.set(entry[0], entry[1]);
+						const [k, v] = config.split("=").map((c) => c.trim());
+						if (k.length > 0 && COLORS.contains(v)) colorConfigs.set(k, v);
 					}
 				}
 			}
@@ -149,11 +150,12 @@ export default class ChatViewPlugin extends Plugin {
 		const widthClass = formatConfigs.has("mw") ?
 			`chat-view-max-width-${formatConfigs.get("mw")}`
 			: (Platform.isMobile ? "chat-view-mobile-width" : "chat-view-desktop-width");
+		const modeClass = `chat-view-bubble-mode-${formatConfigs.has("mode") ? formatConfigs.get("mode") : "default"}`;
 		const headerEl: keyof HTMLElementTagNameMap = formatConfigs.has("header") ?
 			formatConfigs.get("header") as keyof HTMLElementTagNameMap :
 			"h4";
 		const bubble = element.createDiv({
-			cls: ["chat-view-bubble", `chat-view-align-${align}`, marginClass, colorConfigClass, widthClass]
+			cls: ["chat-view-bubble", `chat-view-align-${align}`, marginClass, colorConfigClass, widthClass, modeClass]
 		});
 		if (header.length > 0) bubble.createEl(headerEl, {text: header, cls: ["chat-view-header"]});
 		if (message.length > 0) bubble.createEl("p", {text: message, cls: ["chat-view-message"]});
