@@ -107,7 +107,7 @@ Header: h3
 ~~~
 The above code will generate the following Chat View:
 
-![Chat View WebVTT Preview](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview-preview-webvtt.jpg)
+![Chat View WebVTT Preview](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview_preview_webvtt.jpg)
 
 ## Thank you for reading!
 
