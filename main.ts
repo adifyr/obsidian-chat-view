@@ -1,5 +1,6 @@
 import {Plugin, Platform, moment} from "obsidian";
 import * as webvtt from "node-webvtt";
+import * as showdown from "showdown";
 
 
 const KEYMAP: Record<string, string> = {">": "right", "<": "left", "^": "center"};
@@ -43,9 +44,9 @@ export default class ChatViewPlugin extends Plugin {
 			const maxWidth = vtt.meta && "MaxWidth" in vtt.meta ? vtt.meta.MaxWidth : undefined;
 			const headerConfig = vtt.meta && "Header" in vtt.meta ? vtt.meta.Header : undefined;
 			const modeConfig = vtt.meta && "Mode" in vtt.meta ? vtt.meta.Mode : undefined;
-			if (CONFIGS["mw"].contains(maxWidth)) formatConfigs.set("mw", maxWidth);
-			if (CONFIGS["header"].contains(headerConfig)) formatConfigs.set("header", headerConfig);
-			if (CONFIGS["mode"].contains(modeConfig)) formatConfigs.set("mode", modeConfig);
+			if (CONFIGS["mw"].includes(maxWidth)) formatConfigs.set("mw", maxWidth);
+			if (CONFIGS["header"].includes(headerConfig)) formatConfigs.set("header", headerConfig);
+			if (CONFIGS["mode"].includes(modeConfig)) formatConfigs.set("mode", modeConfig);
 			console.log(formatConfigs);
 
 			for (let index = 0; index < vtt.cues.length; index++) {
@@ -72,7 +73,7 @@ export default class ChatViewPlugin extends Plugin {
 
 			messages.forEach((message, index, arr) => {
 				const prevHeader = index > 0 ? arr[index - 1].header : "";
-				const align = selves && selves.contains(message.header) ? "right" : "left";
+				const align = selves && selves.includes(message.header) ? "right" : "left";
 				const continued = message.header === prevHeader;
 				this.createChatBubble(
 					continued ? "" : message.header, prevHeader, message.body, message.subtext, align, el,
@@ -90,13 +91,13 @@ export default class ChatViewPlugin extends Plugin {
 					const configs = line.replace("{", "").replace("}", "").split(",").map((l) => l.trim());
 					for (const config of configs) {
 						const [k, v] = config.split("=").map((c) => c.trim());
-						if (Object.keys(CONFIGS).contains(k) && CONFIGS[k].contains(v)) formatConfigs.set(k, v);
+						if (Object.keys(CONFIGS).includes(k) && CONFIGS[k].includes(v)) formatConfigs.set(k, v);
 					}
 				} else if (ChatPatterns.colors.test(line)) {
 					const configs = line.replace("[", "").replace("]", "").split(",").map((l) => l.trim());
 					for (const config of configs) {
 						const [k, v] = config.split("=").map((c) => c.trim());
-						if (k.length > 0 && COLORS.contains(v)) colorConfigs.set(k, v);
+						if (k.length > 0 && COLORS.includes(v)) colorConfigs.set(k, v);
 					}
 				}
 			}
@@ -158,7 +159,11 @@ export default class ChatViewPlugin extends Plugin {
 			cls: ["chat-view-bubble", `chat-view-align-${align}`, marginClass, colorConfigClass, widthClass, modeClass]
 		});
 		if (header.length > 0) bubble.createEl(headerEl, {text: header, cls: ["chat-view-header"]});
-		if (message.length > 0) bubble.createEl("p", {text: message, cls: ["chat-view-message"]});
+		if (message.length > 0) {
+			const converter = new showdown.Converter();
+			bubble.innerHTML = converter.makeHtml(message);
+			bubble.getElementsByTagName("p")[0].addClass("chat-view-message");
+		}
 		if (subtext.length > 0) bubble.createEl("sub", {text: subtext, cls: ["chat-view-subtext"]});
 	}
 }
