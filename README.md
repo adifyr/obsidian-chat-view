@@ -134,7 +134,22 @@ The code block above will generate the following Chat View:
 
 Following the release of Version 1.3.0 of the Chat View Plugin, the message section of the Chat View now supports HTML and Markdown rendering! Which means you can now include HTML and Markdown elements in your Chat View Message! **Take a look:**
 
-![Chat View Markdown & HTML Support]()
+![Chat View Markdown & HTML Support](https://github.com/adifyr/obsidian-chat-view/blob/master/images/chatview_preview_md_html.gif)
+
+The above Chat View was generated from the following Code Block:
+
+~~~
+```chat
+[Brian Williams=pink, Stacy Adams=orange]
+{mw=80}
+< Brian Williams | <h6>Pier Trip Suggestions</h6> Hi Stacy, I'm planning to go on a trip to a pier in the state! So, I wanted to ask if you had any suggestions. I have a couple of pre-conditions though: <ul><li>It needs to be a beautiful spot. [So that I can take loads of pics!](https://theculturetrip.com/north-america/usa/california/articles/the-coolest-piers-in-california-from-santa-monica-to-santa-barbara/)</li><li>It needs to be affordable. [This one's kinda expensive.](https://www.tripadvisor.in/Attraction_Review-g60713-d102779-Reviews-Pier_39-San_Francisco_California.html)</li></ul> **So, can you please help me out?** I'll be sure to send over a souvenir. Thanks! | Yesterday at 5:45 PM
+> Stacy Adams | ![Santa Monica Pier](https://images.hdqwalls.com/wallpapers/santa-monica-ferris-wheel-colorful-golden-hour-hz.jpg) <h6>How About Santa Monica?</h6> Jutting out into the Pacific Ocean at the intersection of Ocean and Colorado, it symbolizes the *Heart of Santa Monica* and is one of the most photographed locations in the world. It also has affordable rentals and accomodation! | Today at 10:30 AM
+```
+~~~
+
+> ⚠️ **Important**
+>
+> Markdown Syntax that covers a full line, such as headers (#), Lists (-), Line Breaks (---) etc. will end up rendering the entire Chat View Message in that format. For such cases, it is recommended to use HTML Tags instead, as has been used in the example above. 
 
 ## Thank you for reading!
 
