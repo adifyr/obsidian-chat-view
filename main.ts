@@ -161,8 +161,11 @@ export default class ChatViewPlugin extends Plugin {
 		if (header.length > 0) bubble.createEl(headerEl, {text: header, cls: ["chat-view-header"]});
 		if (message.length > 0) {
 			const converter = new showdown.Converter();
-			bubble.innerHTML = converter.makeHtml(message);
-			bubble.getElementsByTagName("p")[0].addClass("chat-view-message");
+			bubble.innerHTML += converter.makeHtml(message);
+			const paras = bubble.getElementsByTagName("p");
+			for (let index = 0; index < paras.length; index++) {
+				paras[index].className = "chat-view-message";
+			}
 		}
 		if (subtext.length > 0) bubble.createEl("sub", {text: subtext, cls: ["chat-view-subtext"]});
 	}
