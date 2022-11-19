@@ -130,6 +130,12 @@ The code block above will generate the following Chat View:
 
 ![Chat View Minimal Mode](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview_preview_minimal.jpg)
 
+## Markdown & HTML Support In Chat View Message
+
+Following the release of Version 1.3.0 of the Chat View Plugin, the message section of the Chat View now supports HTML and Markdown rendering! Which means you can now include HTML and Markdown elements in your Chat View Message! **Take a look:**
+
+![Chat View Markdown & HTML Support]()
+
 ## Thank you for reading!
 
 This project is published under the [MIT License](LICENSE).
