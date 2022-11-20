@@ -147,9 +147,8 @@ The above Chat View was generated from the following Code Block:
 ```
 ~~~
 
-> ⚠️ **Important**
->
-> Markdown Syntax that covers a full line, such as headers (#), Lists (-), Line Breaks (---) etc. will end up rendering the entire Chat View Message in that format. For such cases, it is recommended to use HTML Tags instead, as has been used in the example above. 
+### ⚠️ Important
+Markdown Syntax that covers a full line, such as headers (#), Lists (-), Line Breaks (---) etc. will end up rendering the entire Chat View Message in that format. For such cases, it is recommended to use HTML Tags instead, as has been used in the example above. 
 
 ## Thank you for reading!
 
