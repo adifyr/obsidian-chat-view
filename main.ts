@@ -13,19 +13,29 @@ const COLORS = [
 	"red", "orange", "yellow", "green", "blue", "purple", "grey", "brown", "indigo", "teal", "pink", "slate", "wood"
 ];
 
-class ChatPatterns {
+abstract class ChatPatterns {
 	static readonly message = /(^>|<|\^)/;
 	static readonly delimiter = /.../;
 	static readonly comment = /^#/;
-	static readonly colors = /\[(.*?)\]/;
-	static readonly format = /{(.*?)}/;
+	static readonly colors = /\[(.+?)\]/;
+	static readonly format = /{(.+?)}/;
 	static readonly joined = RegExp([this.message, this.delimiter, this.colors, this.comment, this.format]
 		.map((pattern) => pattern.source)
 		.join("|"));
 	static readonly voice = /<v\s+([^>]+)>([^<]+)<\/v>/;
 }
 
-interface Message {
+abstract class TranscriptPatterns {
+	static readonly message = /^(\(.+?\)|\[.+?\])(.+?)$/;
+	static readonly specialComment = /^\*\*\*(.+?)\*\*\*$/;
+	static readonly subtext = /^(\(.+?\)|\[.+?\])/;
+	static readonly format = /{(.+?)}/;
+	static readonly colors = /^\[(.+?)\]$/;
+	static readonly align = /^>(.+?)(?:,|$)$/;
+	static readonly configs = RegExp([this.format, this.colors, this.align].map((pattern) => pattern.source).join("|"));
+}
+
+type Message = {
 	readonly header: string;
 	readonly body: string;
 	readonly subtext: string;
@@ -34,6 +44,57 @@ interface Message {
 export default class ChatViewPlugin extends Plugin {
 
 	override async onload(): Promise<void> {
+		this.registerMarkdownCodeBlockProcessor("chat-transcript", (source, el, _) => {
+			const lines = source.split("\n").map((val) => val.trim());
+			const formats = new Map<string, string>();
+			const colors = new Map<string, string>();
+			const rightAlignHeaders: string[] = [];
+			for (const line of lines) {
+				if (TranscriptPatterns.format.test(line)) {
+					const configs = line.replace("{", "").replace("}", "").split(",").map((l) => l.trim());
+					for (const config of configs) {
+						const [k, v] = config.split("=").map((c) => c.trim());
+						if (Object.keys(CONFIGS).includes(k) && CONFIGS[k].includes(v)) formats.set(k, v);
+					}
+				} else if (TranscriptPatterns.colors.test(line)) {
+					const configs = line.replace("[", "").replace("]", "").split(",").map((l) => l.trim());
+					for (const config of configs) {
+						const [k, v] = config.split("=").map((c) => c.trim());
+						if (k.length > 0 && COLORS.includes(v)) colors.set(k, v);
+					}
+				} else if (TranscriptPatterns.align.test(line)) {
+					rightAlignHeaders.push(...line.substring(1).split(",").map((val) => val.trim()));
+				}
+			}
+			for (let index = 0; index < lines.length; index++) {
+				const line = lines[index].trim();
+				if (TranscriptPatterns.message.test(line)) {
+					const subtext = line.match(TranscriptPatterns.subtext)[0].replace(/\(|\)|\[|\]/g, "");
+					const main = line.substring(subtext.length + 2).trim().split(":");
+					if (main.length === 1 && TranscriptPatterns.specialComment.test(main[0])) {
+						el.createEl("p", {text: main[0].replace(/\*/g, "").trim(), cls: ["chat-view-comment"]});
+					} else {
+						const header = main.length === 1 ? "" : main[0];
+						const body = main.length === 1 ? main[0] : main[1];
+						let prev = "";
+						const prevLine = lines[(index - 1 < 0 ? 0 : index - 1)].trim();
+						if (TranscriptPatterns.message.test(prevLine)) {
+							const prevSubtext = prevLine.match(TranscriptPatterns.subtext)[0];
+							const prevMain = prevLine.substring(prevSubtext.length).trim().split(":");
+							prev = prevMain.length === 1 ? "" : main[0];
+						}
+						const align = rightAlignHeaders.includes(header) ? "right" : "left";
+						const continued = prev === header || header === "";
+						this.createChatBubble(header, prev, body, subtext, align, el, continued, colors, formats);
+					}
+				} else if (line === "...") {
+					const delimiter = el.createDiv({cls: ["delimiter"]});
+					for (let i = 0; i < 3; i++) delimiter.createDiv({cls: ["dot"]});
+				} else if (!TranscriptPatterns.configs.test(line)) {
+					el.createEl("p", {text: line, cls: ["chat-view-comment"]});
+				}
+			}
+		});
 		this.registerMarkdownCodeBlockProcessor("chat-webvtt", (source, el, _) => {
 			const vtt = webvtt.parse(source, {meta: true});
 			const messages: Message[] = [];
@@ -84,20 +145,20 @@ export default class ChatViewPlugin extends Plugin {
 		this.registerMarkdownCodeBlockProcessor("chat", (source, el, _) => {
 			const rawLines = source.split("\n").filter((line) => ChatPatterns.joined.test(line.trim()));
 			const lines = rawLines.map((rawLine) => rawLine.trim());
-			const formatConfigs = new Map<string, string>();
-			const colorConfigs = new Map<string, string>();
+			const formats = new Map<string, string>();
+			const colors = new Map<string, string>();
 			for (const line of lines) {
 				if (ChatPatterns.format.test(line)) {
 					const configs = line.replace("{", "").replace("}", "").split(",").map((l) => l.trim());
 					for (const config of configs) {
 						const [k, v] = config.split("=").map((c) => c.trim());
-						if (Object.keys(CONFIGS).includes(k) && CONFIGS[k].includes(v)) formatConfigs.set(k, v);
+						if (Object.keys(CONFIGS).includes(k) && CONFIGS[k].includes(v)) formats.set(k, v);
 					}
 				} else if (ChatPatterns.colors.test(line)) {
 					const configs = line.replace("[", "").replace("]", "").split(",").map((l) => l.trim());
 					for (const config of configs) {
 						const [k, v] = config.split("=").map((c) => c.trim());
-						if (k.length > 0 && COLORS.includes(v)) colorConfigs.set(k, v);
+						if (k.length > 0 && COLORS.includes(v)) colors.set(k, v);
 					}
 				}
 			}
@@ -113,22 +174,19 @@ export default class ChatViewPlugin extends Plugin {
 					const components = line.substring(1).split("|");
 					if (components.length > 0) {
 						const first = components[0];
-						const header = components.length > 1 ? first.trim() : "";
-						const message = components.length > 1 ? components[1].trim() : first.trim();
-						const subtext = components.length > 2 ? components[2].trim() : "";
-						const continued = index > 0 && line.charAt(0) === lines[index - 1].charAt(0) && header === "";
-						let prevHeader = "";
-						if (continued) {
+						const head = components.length > 1 ? first.trim() : "";
+						const msg = components.length > 1 ? components[1].trim() : first.trim();
+						const sub = components.length > 2 ? components[2].trim() : "";
+						const cont = index > 0 && line.charAt(0) === lines[index - 1].charAt(0) && head === "";
+						let prev = "";
+						if (cont) {
 							continuedCount++;
 							const prevComponents = lines[index - continuedCount].trim().substring(1).split("|");
-							prevHeader = prevComponents[0].length > 1 ? prevComponents[0].trim() : "";
+							prev = prevComponents[0].length > 1 ? prevComponents[0].trim() : "";
 						} else {
 							continuedCount = 0;
 						}
-						this.createChatBubble(
-							header, prevHeader, message, subtext, KEYMAP[line.charAt(0)], el, continued,
-							colorConfigs, formatConfigs,
-						);
+						this.createChatBubble(head, prev, msg, sub, KEYMAP[line.charAt(0)], el, cont, colors, formats);
 					}
 				}
 			}
