@@ -150,6 +150,47 @@ The above Chat View was generated from the following Code Block:
 ### ⚠️ Important
 Markdown Syntax that covers a full line, such as headers (#), Lists (-), Line Breaks (---) etc. will end up rendering the entire Chat View Message in that format. For such cases, it is recommended to use HTML Tags instead, as has been used in the example above. 
 
+---
+
+## Chat Transcripts (Zendesk, Customer Support, CRMs) Support!
+
+As of Version 1.4.0, Obsidian Chat View now includes a new mode that enables the rendering of Chat Transcripts from Customer Support Platforms such as Zendesk and other CRMs. To use Transcript Mode simply give your code-block the name of `chat-transcript`. Below is an example of the Chat Transcripts format:
+
+```
+(1:38:05 PM) *** Firstname Lastname has joined the chat ***
+(1:38:39 PM) Firstname Lastname: This is the chat-text followed after the time and name.
+(1:40:26 PM) Other-Firstname Other-Lastname: Sure thanks!
+(2:21:29 PM) *** Firstname Lastname has left ***
+```
+
+However, in the plugin, Transcript Mode includes all the same styling & formatting features as other chat modes. It even has delimiters There are a few additions however:
+
+1. The `>` character is now used in the beginning of the code-block to specify which participants should have their Chat View blocks aligned on the left side.
+2. Chat Transcripts supports both `()` and `[]` for its timestamps.
+3. Two kinds of comment formats are allowed in the plugin:
+    a. `(2:21:29 PM) *** Firstname Lastname has left ***` - One with the timestamp and the three stars: `***`
+    b. Any line in the code block that doesn't follow a valid Transcript format (`[Timestamp] Name: Message`), it will also be treated as a comment.
+
+All of this culminates into the kind of Chat View you can see below:
+
+~~~
+```chat-transcript
+> Other-Firstname Other-Lastname
+[Firstname Lastname=blue, Other-Firstname Other-Lastname=pink]
+{header=h4, mw=80}
+
+(1:38:05 PM) *** Firstname Lastname has joined the chat. ***
+(1:38:39 PM) Firstname Lastname: This is the chat-text followed after the time and name.
+...
+[1:40:26 PM] Other-Firstname Other-Lastname: Sure thanks! It's nice to have been able to meet someone who could help me with this.
+Firstname Lastname has left this chat.
+```
+~~~
+
+The above code-block will render the following Chat View:
+
+![Chat View With Transcripts Support](https://user-images.githubusercontent.com/86793553/206829253-6c4da4ff-3537-458d-ab45-c501d1f43262.png)
+
 ## Thank you for reading!
 
 This project is published under the [MIT License](LICENSE).
