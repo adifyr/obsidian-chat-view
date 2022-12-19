@@ -1,6 +1,3 @@
-### _Hi! If you loved my plugin and want to support me to make more..._
-<a href="https://www.buymeacoffee.com/adifyr"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee!&emoji=&slug=adifyr&button_colour=5F7FFF&font_colour=ffffff&font_family=Comic&outline_colour=000000&coffee_colour=FFDD00" /></a>
-
 # Obsidian Chat View Plugin
 Chat View let's you quickly and easily create elegant Chat UIs in your Markdown Files.
 
@@ -195,5 +192,8 @@ The above code-block will render the following Chat View:
 ![Chat View With Transcripts Support](https://user-images.githubusercontent.com/86793553/206829253-6c4da4ff-3537-458d-ab45-c501d1f43262.png)
 
 ## Thank you for reading!
+
+#### _Kindly support me so that I may make more plugins like this for you!..._
+<a href="https://www.buymeacoffee.com/adifyr"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee!&emoji=&slug=adifyr&button_colour=5F7FFF&font_colour=ffffff&font_family=Comic&outline_colour=000000&coffee_colour=FFDD00" /></a>
 
 This project is published under the [MIT License](LICENSE).
