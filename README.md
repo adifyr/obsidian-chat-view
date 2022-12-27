@@ -193,7 +193,4 @@ The above code-block will render the following Chat View:
 
 ## Thank you for reading!
 
-##### _Your financial support means the world to whoever you give it to. If you only contribute once in a while, please do think of me next time... ❤️_
-<a href="https://www.buymeacoffee.com/adifyr"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee!&emoji=&slug=adifyr&button_colour=5F7FFF&font_colour=ffffff&font_family=Comic&outline_colour=000000&coffee_colour=FFDD00" /></a>
-
 This project is published under the [MIT License](LICENSE).
