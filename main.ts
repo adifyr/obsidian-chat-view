@@ -1,6 +1,7 @@
 import {Plugin, Platform, moment} from "obsidian";
 import * as webvtt from "node-webvtt";
 import * as showdown from "showdown";
+import * as katex from "katex";
 
 
 const KEYMAP: Record<string, string> = {">": "right", "<": "left", "^": "center"};
@@ -218,8 +219,11 @@ export default class ChatViewPlugin extends Plugin {
 		});
 		if (header.length > 0) bubble.createEl(headerEl, {text: header, cls: ["chat-view-header"]});
 		if (message.length > 0) {
+			const latexMessage = message.split("$$").map((value, index) => {
+				return index % 2 === 1 ? katex.default.renderToString(value, {displayMode: true}) : value;
+			}).join("");
 			const converter = new showdown.Converter();
-			bubble.innerHTML += converter.makeHtml(message);
+			bubble.innerHTML += converter.makeHtml(latexMessage);
 			const paras = bubble.getElementsByTagName("p");
 			for (let index = 0; index < paras.length; index++) {
 				paras[index].className = "chat-view-message";
