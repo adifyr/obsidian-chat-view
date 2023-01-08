@@ -16,6 +16,8 @@ The above code will generate the following Chat View:
 
 ![Chat View Preview 1](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview_preview1.jpg)
 
+💡 **If you would like to show the pipe `|` character in your message, all you have to do is escape it with a backslash, like this: `\|`.**
+
 ## Add Delimiters & Comments
 You can add delimiters to your chat view simply by entering `'...'` on a line. To add a comment, start a line with the `'#'` character. Take a look at the following example:
 
