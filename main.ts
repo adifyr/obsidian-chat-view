@@ -172,7 +172,7 @@ export default class ChatViewPlugin extends Plugin {
 					const delimiter = el.createDiv({cls: ["delimiter"]});
 					for (let i = 0; i < 3; i++) delimiter.createDiv({cls: ["dot"]});
 				} else if (ChatPatterns.message.test(line)) {
-					const components = line.replaceAll("\\|", "#%&#").split("|").map((value) => {
+					const components = line.substring(1).replaceAll("\\|", "#%&#").split("|").map((value) => {
 						return value.replaceAll("#%&#", "|").trim();
 					});
 					if (components.length > 0) {
