@@ -1,7 +1,5 @@
-import {Plugin, Platform, moment} from "obsidian";
+import {Plugin, Platform, moment, MarkdownRenderer} from "obsidian";
 import * as webvtt from "node-webvtt";
-import * as showdown from "showdown";
-import * as katex from "katex";
 
 
 const KEYMAP: Record<string, string> = {">": "right", "<": "left", "^": "center"};
@@ -45,7 +43,7 @@ type Message = {
 export default class ChatViewPlugin extends Plugin {
 
 	override async onload(): Promise<void> {
-		this.registerMarkdownCodeBlockProcessor("chat-transcript", (source, el, _) => {
+		this.registerMarkdownCodeBlockProcessor("chat-transcript", (source, el, context) => {
 			const lines = source.split("\n").map((val) => val.trim());
 			const formats = new Map<string, string>();
 			const colors = new Map<string, string>();
@@ -86,7 +84,9 @@ export default class ChatViewPlugin extends Plugin {
 						}
 						const align = rightAlignHeaders.includes(header) ? "right" : "left";
 						const continued = prev === header || header === "";
-						this.createChatBubble(header, prev, body, subtext, align, el, continued, colors, formats);
+						this.createChatBubble(
+							header, prev, body, subtext, align, el, continued, colors, formats, context.sourcePath
+						);
 					}
 				} else if (line === "...") {
 					const delimiter = el.createDiv({cls: ["delimiter"]});
@@ -96,7 +96,7 @@ export default class ChatViewPlugin extends Plugin {
 				}
 			}
 		});
-		this.registerMarkdownCodeBlockProcessor("chat-webvtt", (source, el, _) => {
+		this.registerMarkdownCodeBlockProcessor("chat-webvtt", (source, el, context) => {
 			const vtt = webvtt.parse(source, {meta: true});
 			const messages: Message[] = [];
 			const self = vtt.meta && "Self" in vtt.meta ? vtt.meta.Self as string : undefined;
@@ -139,11 +139,11 @@ export default class ChatViewPlugin extends Plugin {
 				const continued = message.header === prevHeader;
 				this.createChatBubble(
 					continued ? "" : message.header, prevHeader, message.body, message.subtext, align, el,
-					continued, colorConfigs, formatConfigs,
+					continued, colorConfigs, formatConfigs, context.sourcePath,
 				);
 			});
 		});
-		this.registerMarkdownCodeBlockProcessor("chat", (source, el, _) => {
+		this.registerMarkdownCodeBlockProcessor("chat", (source, el, context) => {
 			const rawLines = source.split("\n").filter((line) => ChatPatterns.joined.test(line.trim()));
 			const lines = rawLines.map((rawLine) => rawLine.trim());
 			const formats = new Map<string, string>();
@@ -189,7 +189,9 @@ export default class ChatViewPlugin extends Plugin {
 						} else {
 							continuedCount = 0;
 						}
-						this.createChatBubble(head, prev, msg, sub, KEYMAP[line.charAt(0)], el, cont, colors, formats);
+						this.createChatBubble(
+							head, prev, msg, sub, KEYMAP[line.charAt(0)], el, cont, colors, formats, context.sourcePath
+						);
 					}
 				}
 			}
@@ -206,6 +208,7 @@ export default class ChatViewPlugin extends Plugin {
 		continued: boolean,
 		colorConfigs: Map<string, string>,
 		formatConfigs: Map<string, string>,
+		sourcePath: string,
 	) {
 		const marginClass = continued ? "chat-view-small-vertical-margin" : "chat-view-default-vertical-margin";
 		const colorConfigClass = `chat-view-${colorConfigs.get(continued ? prevHeader : header)}`;
@@ -221,11 +224,7 @@ export default class ChatViewPlugin extends Plugin {
 		});
 		if (header.length > 0) bubble.createEl(headerEl, {text: header, cls: ["chat-view-header"]});
 		if (message.length > 0) {
-			const latexMessage = message.split("$$").map((value, index) => {
-				return index % 2 === 1 ? katex.default.renderToString(value, {displayMode: true}) : value;
-			}).join("");
-			const converter = new showdown.Converter();
-			bubble.innerHTML += converter.makeHtml(latexMessage);
+			MarkdownRenderer.renderMarkdown(message, bubble, sourcePath, null);
 			const paras = bubble.getElementsByTagName("p");
 			for (let index = 0; index < paras.length; index++) {
 				paras[index].className = "chat-view-message";
