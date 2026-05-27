@@ -1,0 +1,78 @@
+div.chat-view {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0px;
+}
+
+div.chat-view-message {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  max-width: 85%;
+  padding: 16px 20px;
+  margin: 8px 0;
+  gap: 8px;
+  background: transparent;
+  border: 1.5px solid var(--background-modifier-border);
+  color: var(--text-normal);
+}
+
+div.chat-view-message-left {
+  border-top-left-radius: 0px;
+  align-self: flex-start;
+}
+
+div.chat-view-message-right {
+  border-top-right-radius: 0px;
+  align-self: flex-end;
+}
+
+div.chat-view-message-center {
+  align-self: center;
+}
+
+div.chat-view-message div.chat-view-header {
+  font-weight: bold;
+  color: var(--color-green);
+}
+
+div.chat-view-message div.chat-view-body {
+  margin: 0;
+  padding: 0;
+}
+
+div.chat-view-message div.chat-view-body > :first-child {
+  margin-top: 0;
+}
+
+div.chat-view-message div.chat-view-body > :last-child {
+  margin-bottom: 0;
+}
+
+div.chat-view-message div.chat-view-subtext {
+  font-size: var(--font-smaller);
+  color: var(--text-faint);
+}
+
+div.chat-view-comment {
+  max-width: 75%;
+  color: var(--text-muted);
+  text-align: center;
+  align-self: center;
+  padding: 24px;
+}
+
+div.chat-view-delimeter {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 24px;
+  justify-content: center;
+}
+
+div.chat-view-delimeter-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--text-faint);
+}
