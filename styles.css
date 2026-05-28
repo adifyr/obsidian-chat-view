@@ -31,25 +31,60 @@ div.chat-view-message-center {
   align-self: center;
 }
 
-div.chat-view-message div.chat-view-header {
+div.chat-view-header-blue {
+  font-weight: bold;
+  color: var(--color-blue);
+}
+
+div.chat-view-header-green {
   font-weight: bold;
   color: var(--color-green);
 }
 
-div.chat-view-message div.chat-view-body {
+div.chat-view-header-red {
+  font-weight: bold;
+  color: var(--color-red);
+}
+
+div.chat-view-header-orange {
+  font-weight: bold;
+  color: var(--color-orange);
+}
+
+div.chat-view-header-yellow {
+  font-weight: bold;
+  color: var(--color-yellow);
+}
+
+div.chat-view-header-cyan {
+  font-weight: bold;
+  color: var(--color-cyan);
+}
+
+div.chat-view-header-purple {
+  font-weight: bold;
+  color: var(--color-purple);
+}
+
+div.chat-view-header-pink {
+  font-weight: bold;
+  color: var(--color-pink);
+}
+
+div.chat-view-body {
   margin: 0;
   padding: 0;
 }
 
-div.chat-view-message div.chat-view-body > :first-child {
+div.chat-view-body > :first-child {
   margin-top: 0;
 }
 
-div.chat-view-message div.chat-view-body > :last-child {
+div.chat-view-body > :last-child {
   margin-bottom: 0;
 }
 
-div.chat-view-message div.chat-view-subtext {
+div.chat-view-subtext {
   font-size: var(--font-smaller);
   color: var(--text-faint);
 }
