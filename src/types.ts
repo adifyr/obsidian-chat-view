@@ -1,3 +1,7 @@
+import {MarkdownPostProcessorContext} from "obsidian";
+
+export type Context = MarkdownPostProcessorContext;
+
 export type ChatMessage = {
   readonly kind: "message";
   readonly side: "left" | "right" | "center";
@@ -11,8 +15,8 @@ export type ChatComment = {
   readonly body: string;
 };
 
-export type ChatDelimeter = {
-  readonly kind: "delimeter";
+export type ChatDelimiter = {
+  readonly kind: "delimiter";
 };
 
-export type ChatNode = ChatMessage | ChatComment | ChatDelimeter;
+export type ChatNode = ChatMessage | ChatComment | ChatDelimiter;

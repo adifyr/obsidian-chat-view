@@ -31,6 +31,10 @@ div.chat-view-message-center {
   align-self: center;
 }
 
+div.chat-view-message-continued {
+  margin-top: 2px;
+}
+
 div.chat-view-header-blue {
   font-weight: bold;
   color: var(--color-blue);
@@ -97,7 +101,7 @@ div.chat-view-comment {
   padding: 24px;
 }
 
-div.chat-view-delimeter {
+div.chat-view-delimiter {
   display: flex;
   flex-direction: row;
   gap: 8px;
@@ -105,7 +109,7 @@ div.chat-view-delimeter {
   justify-content: center;
 }
 
-div.chat-view-delimeter-dot {
+div.chat-view-delimiter-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
