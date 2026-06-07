@@ -1,0 +1,9 @@
+{
+	"id": "obsidian-chat-view",
+	"name": "Chat View",
+	"version": "2.0.0",
+	"minAppVersion": "1.5.0",
+	"description": "Create elegant Chat UIs in your markdown files using multiple formats.",
+	"author": "Adifyr",
+	"isDesktopOnly": false
+}
