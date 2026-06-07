@@ -1,0 +1,51 @@
+name: Attest release assets
+
+on:
+    release:
+        types: [published]
+    workflow_dispatch:
+        inputs:
+            tag:
+                description: "Release tag to build and attest"
+                required: true
+                default: "2.0.0"
+
+permissions:
+    contents: write
+    id-token: write
+    attestations: write
+
+jobs:
+    attest:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Resolve release tag
+              id: vars
+              run: echo "tag=${{ github.event.release.tag_name || github.event.inputs.tag }}" >> "$GITHUB_OUTPUT"
+
+            - uses: actions/checkout@v4
+              with:
+                  ref: ${{ steps.vars.outputs.tag }}
+
+            - name: Use Node.js 20.x
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.x
+                  cache: "npm"
+
+            - run: npm ci
+            - run: npm run build
+
+            - name: Generate artifact attestations
+              uses: actions/attest-build-provenance@v2
+              with:
+                  subject-path: |
+                      main.js
+                      manifest.json
+                      styles.css
+
+            - name: Upload attested assets to the release
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: gh release upload "${{ steps.vars.outputs.tag }}" main.js manifest.json styles.css --clobber
