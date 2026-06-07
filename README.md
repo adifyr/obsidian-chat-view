@@ -49,23 +49,45 @@ When the same speaker sends two messages in a row, you usually don't want their 
 ~~~
 Repeating the same name in the header does the same thing, so you don't have to switch to an empty header if you'd rather keep things explicit.
 
-### Multi-line Messages
-The body can run across as many lines as you like. Just start writing on the line after the first `'|'` and close the message off with the final `'|subtext}}'` whenever you're done. This is also where you can drop in Markdown and embedded images, since the body is rendered as full Markdown:
+### Multi-line Messages & Markdown
+The body isn't limited to a single line. Start writing on the line after the first `'|'`, take as many lines as you need, and close the message off with the final `'|subtext}}'` when you're done.
+
+What makes this worth doing is that the body is rendered as full Markdown. Anything you'd write elsewhere in a note works inside a bubble, including:
+
+- **Bold**, *italic* and `inline code`
+- Bulleted and numbered lists
+- [External links](https://obsidian.md) and `[[wikilinks]]`
+- Embedded images, like `![[keep.jpg|200]]`, where the `|200` sets the width
+- Blockquotes, callouts, headings and tables
+
+💡 **If you used Chat View 1.x, this is a genuine change. Back then, full-line Markdown like a list or a blockquote would take over the entire message. Now that the body is properly multi-line, all of it renders the way you'd expect.**
+
+Here's a message that leans on a handful of these at once:
 ~~~
 ```chat
-{{Lyra Dawnwhisper|
+> Hannah Reed
 
-I crept down the dry creek until I could see the walls with my own eyes, and I sketched what I found:
+{{Hannah Reed|Could you send me your carbonara recipe? Mine always comes out scrambled.|7:02 PM}}
 
-![[keep.jpg|200]]
+{{Marco Bianchi|
 
-One road climbs to the gate, narrow enough for a single cart.
+Of course. The trick is to **never** let the eggs hit direct heat. Here's the short version:
 
-|8:17 PM}}
+1. Boil the pasta in *well-salted* water.
+2. Whisk two yolks with a handful of grated `pecorino`.
+3. Kill the heat, then fold the egg mix through the hot pasta off the stove.
+
+> The pan's leftover warmth is plenty. If it sizzles, it's already too hot.
+
+I learned it from [an old trattoria guide](https://obsidian.md) years ago.
+
+|7:05 PM}}
 ```
 ~~~
 
-💡 **Notice the `![[keep.jpg|200]]` above. The `|200` sizes the image, and because the body is rendered as Markdown, wikilinks and embeds work just as they would anywhere else in your note.**
+The above code will generate the following Chat View:
+
+![Chat View Markdown Support](images/chat-view-markdown.png)
 
 ### Delimiters & Comments
 To draw a divider between messages, put `'...'` on a line by itself. To add a comment that sits outside the bubbles (handy for narration), start a line with the `'#'` character:
