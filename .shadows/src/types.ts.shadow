@@ -1,0 +1,5 @@
+type ChatMessage {
+  name string
+  body string
+  subtext string
+}

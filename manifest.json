@@ -1,9 +1,9 @@
 {
 	"id": "obsidian-chat-view",
 	"name": "Chat View",
-	"version": "1.6.0",
-	"minAppVersion": "1.1.0",
-	"description": "Chat View enables you to create elegant Chat UIs in your Obsidian markdown files. It also supports the WebVTT format.",
+	"version": "2.0.0",
+	"minAppVersion": "1.5.0",
+	"description": "Create elegant Chat UIs in your markdown files using multiple formats.",
 	"author": "Aditya Majethia",
 	"isDesktopOnly": false
 }
