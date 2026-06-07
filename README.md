@@ -1,197 +1,244 @@
 # Obsidian Chat View Plugin
-Chat View let's you quickly and easily create elegant Chat UIs in your Markdown Files.
+Chat View lets you quickly and easily create elegant Chat UIs in your Markdown Files.
 
-![Obsidian Chat View Overview](https://github.com/adifyr/obsidian-chat-view/raw/master/images/obsidian_chatview_plugin.jpg)
+![Obsidian Chat View Banner](images/chat-view-banner.png)
 
-## Usage
+Version 2.0 is a full rewrite. The default `chat` format is new, and it understands multi-line messages, embedded images, automatic speaker colors and a cleaner way of aligning your bubbles. If you've been using the plugin since 1.x and want your old code blocks to keep working exactly as they did, don't worry. The classic syntax lives on as the `chat-old` format. More on that further down.
 
-Every chat message must be prefixed with a `'<'`, `'>'` or `'^'` for left, right & center aligning the messages respectively. Each chat message consists of 3 parts: The header, message and the subtext. The parts are separated by a `'|'` character. Take a look at the example below to see how it works:
+On top of the two `chat` formats, the plugin can also render transcripts you've exported from elsewhere: WebVTT captions, Zendesk chats and Intercom conversations all have their own dedicated formats.
+
+## The `chat` Format
+This is the default format and the one you'll reach for most of the time. Give your code block the name `chat` and write your messages like this:
+
+```
+{{header|body|subtext}}
+```
+
+Every message has three parts separated by the `'|'` character: the **header** (usually the speaker's name), the **body** (the message itself) and the **subtext** (usually a timestamp). Any of the three can be left empty. Take a look at the example below to see how it works:
 ~~~
 ```chat
-< Fitzwilliam Darcy | I've fought against my judgement, my family's expectations... The inferiority of your birth, my rank and circumstance. | 23rd July, 1846 at 5:42 PM
-> Elizabeth Bennett | Now hold on, Mr. Darcy, I'm afraid I don't understand where you're going with this. | 23rd July, 1846 at 5:42 PM
+{{Elizabeth Bennett|I'm afraid I don't quite understand where you're going with this, Mr. Darcy.|5:42 PM}}
+{{Fitzwilliam Darcy|I came here to tell you that I am, most ardently, in love with you.|5:43 PM}}
 ```
 ~~~
-The above code will generate the following Chat View:
 
-![Chat View Preview 1](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview_preview1.jpg)
-
-💡 **If you would like to show the pipe `|` character in your message, all you have to do is escape it with a backslash, like this: `\|`.**
-
-## Add Delimiters & Comments
-You can add delimiters to your chat view simply by entering `'...'` on a line. To add a comment, start a line with the `'#'` character. Take a look at the following example:
-
+### Aligning Your Bubbles
+By default every bubble sits on the left. To move a speaker over to the right, add a line starting with `'>'` followed by their name. To center a speaker, use `'^'` instead. You can list more than one name by separating them with commas, and you can put these lines anywhere in the block:
 ~~~
 ```chat
-< Fitzwilliam Darcy | Just listen to me, all right? You simply cannot fathom the amount of courage I've had to muster to say this.
-# Lizzie gazed at Darcy with a baffled look on her face. Darcy was now sweating profusely. This only unsettled her even more. What was happening?
-> Elizabeth Bennett | Mr. Darcy, are you all right? Why did you come here?
+> Fitzwilliam Darcy
+^ The Narrator
+
+{{Elizabeth Bennett|This is on the left, since left is the default.|}}
+{{Fitzwilliam Darcy|And this one sits on the right.|}}
+{{The Narrator|While this one rests in the center.|}}
+```
+~~~
+
+💡 **Alignment is set per speaker, not per message. Once you've listed a name under `'>'` or `'^'`, every message from that name is aligned the same way.**
+
+### Continuation
+When the same speaker sends two messages in a row, you usually don't want their name repeated above every bubble. Leave the header empty and the message will simply continue from the one before it, inheriting its side:
+~~~
+```chat
+> Fitzwilliam Darcy
+
+{{Elizabeth Bennett|You can't be serious. After all we've been through?|6:01 PM}}
+{{|Yes. I will marry you.|6:02 PM}}
+```
+~~~
+Repeating the same name in the header does the same thing, so you don't have to switch to an empty header if you'd rather keep things explicit.
+
+### Multi-line Messages
+The body can run across as many lines as you like. Just start writing on the line after the first `'|'` and close the message off with the final `'|subtext}}'` whenever you're done. This is also where you can drop in Markdown and embedded images, since the body is rendered as full Markdown:
+~~~
+```chat
+{{Lyra Dawnwhisper|
+
+I crept down the dry creek until I could see the walls with my own eyes, and I sketched what I found:
+
+![[keep.jpg|200]]
+
+One road climbs to the gate, narrow enough for a single cart.
+
+|8:17 PM}}
+```
+~~~
+
+💡 **Notice the `![[keep.jpg|200]]` above. The `|200` sizes the image, and because the body is rendered as Markdown, wikilinks and embeds work just as they would anywhere else in your note.**
+
+### Delimiters & Comments
+To draw a divider between messages, put `'...'` on a line by itself. To add a comment that sits outside the bubbles (handy for narration), start a line with the `'#'` character:
+~~~
+```chat
+{{Lyra Dawnwhisper|Hold here a moment. That smoke is too black to be a campfire.|8:14 PM}}
+
+# The torches below begin to drift apart, just as she foretold.
+
 ...
-< Fitzwilliam Darcy | I came here to tell you that I'm in love with you. I'm deeply, unabashedly, utterly in love with you.
+
+{{Kaelen Stormforge|Then the hour is yours. Lead on.|9:03 PM}}
+```
+~~~
+
+### Showing a `|` In Your Message
+Since the `'|'` character separates the three parts of a message, you'll need to escape it if you want one to actually appear. Just put a backslash in front of it, like this: `\|`. This is exactly what makes the `![[keep.jpg|200]]` embed from earlier work, since that pipe needs to survive into the Markdown.
+
+### Putting It All Together
+Everything above comes together in the banner at the top of this page. Here's the code behind it:
+~~~
+```chat
+> Kaelen Stormforge
+
+# Dusk settles over the Whispering Vale. Lyra crouches at the treeline, her companion close behind.
+
+{{Lyra Dawnwhisper|Hold here a moment. Look past the ridge, where the pines thin out. That smoke rising over the rocks is too steady and too black to be any traveller's campfire. Someone down there is burning pitch by the barrel.|8:14 PM}}
+
+{{Kaelen Stormforge|The Ashbound, this far west of the river? If that is their banner staked in the valley, then every map the council drew this winter is already worthless. They swore the high passes were still ours.|8:15 PM}}
+
+...
+
+{{Lyra Dawnwhisper|
+
+Swearing a thing does not make it true. So we bring them proof they cannot argue away. I crept down the dry creek until I could see the walls with my own eyes, and I sketched what I found:
+
+![[keep.jpg|200]]
+
+One road climbs to the gate, narrow enough for a single cart, and the sentries seal it the moment the moon clears the eastern tower.
+
+|8:17 PM}}
+
+...
+
+{{Kaelen Stormforge|A bold plan, scout, and a thin one. That road would pen us in like sheep if the gap shut early. Tell me you have a second way down off that rock before I agree to anything.|8:18 PM}}
+
+{{Lyra Dawnwhisper|If the front gate closes, we go over the cistern wall on the north face. They leave it unguarded because they believe it cannot be climbed. They have simply never watched me climb.|8:19 PM}}
+
+...
+
+# The torches below begin to drift apart, just as she foretold.
+
+{{Kaelen Stormforge|Then the hour is yours. Lead on, and I will be the shadow at your back. Whatever waits behind those walls, we walk out together or we do not walk out at all.|9:03 PM}}
+```
+~~~
+
+## The `chat-old` Format
+If you've been using Chat View since the 1.x days, this is the format you already know. Give your code block the name `chat-old` and your existing blocks will render just like they always have.
+
+Every message is a single line that starts with `'<'`, `'>'` or `'^'` to align it left, right or center. After the marker come the same three parts as before, separated by `'|'`: the header, the message and the subtext. You can leave parts out, and a line on its own with no `'|'` is treated as just a message. Delimiters (`'...'`) and comments (`'#'`) work here too. Take a look:
+~~~
+```chat-old
+< Elara Voss | I have been going through the archive logs all morning. Whatever wiped sector 7 did it cleanly. It is like the data was never there. | 2:14 PM
+> Dr. Harlan Mace | That is not a storage failure. That is a deliberate erasure. | 2:15 PM
+< Elara Voss | Which narrows it to four people, including us. | 2:16 PM
+> Dr. Harlan Mace | Three. I was off-grid at the observatory that night. | 2:17 PM
+# A long silence settled over the console room. Elara turned the screen toward him.
+< Elara Voss | Then you had better hope those logs are intact, because your clearance badge was used at 1:52 AM. | 2:19 PM
+...
+> Dr. Harlan Mace | That is not possible. Show me the exact entry. | 2:21 PM
 ```
 ~~~
 
 The above code will generate the following Chat View:
 
-![Chat View Preview 2](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview_preview2.jpg)
-
-As you may have noticed, I've actually left out the subtext from these messages. The Chat View plugin is flexible that way. You can also leave out the header if you like just by starting the message off with the `'|'` character. For example, the following code:
-
-~~~
-```chat
-< Fitzwilliam Darcy | And I care not for the consequences of what I'm about to do.
-< | Elizabeth Bennett, will you marry me? | 23rd July 1846, 5:51 PM
-```
-~~~
-
-Will result in the Chat View seen below:
-
-![Chat View Preview 3](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview_preview3.jpg)
-
-## Customization
-To add that last bit of organization & pizazz, the plugin also includes the ability to customize the header size, header colors and maximum width of the chat bubbles. Here's how you can configure each of them for your Chat View:
-
-- ### Header Size
-    Chat View allows you to choose from 5 different sizes for your Chat Bubble's header: `[h2, h3, h4, h5, h6]`. This can be done by simply adding the following config line to your code block: `{header=<hX>}`.
-
-- ### Header Color
-    You can also change the color of headers speaker-wise. You may choose from upto 13 colors: `[red, green, blue, yellow, orange, purple, grey, brown, indigo, teal, pink, slate, wood]`. This can be done by adding a color configuration like this to your code block: `[Person Name=color, Person Name=color]`.
-
-- ### Max Width
-    The maximum width of the Chat Bubble can be specified by adding the following to your config line: `{..., mw=width}`. The plugin accepts 9 widths (in percentages) from 50% to 90% at an interval of 5%. Namely: `[50, 55, 60, 65, 70, 75, 80, 85, 90]`.
-
-The below example showcases how all three of these work in tandem.
-~~~
-```chat
-{header=h3, mw=75}
-[Elizabeth Bennett=blue, Fitzwilliam Darcy=yellow]
-
-> Elizabeth Swann | I... But what about... You can't be serious, Mr. Darcy. This is preposterous. After all we've been through, I thought...
-> | Yes. I will marry you. | 23rd July, 1846 at 6:02 PM.
-# Darcy had no words left. They'd reached a point beyond all mannerisms, all formalities. All that was left was raw love. Only it could speak next.
-< Fitzwilliam Darcy | I love you Lizzie. With all my heart. And I will do so for as long as we shall be together. | 23rd July, 1846 at 6:04 PM.
-```
-~~~
-
-The above code will generate the following Chat View:
-
-![Chat View Preview 4](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview_preview4.jpg)
+![Chat View chat-old Format](images/chat-view-old-chat.png)
 
 ## WebVTT Support!
+Chat View can render WebVTT caption files, which is the format most meeting tools and video players export their transcripts in. Give your code block the name `chat-webvtt` and paste your WebVTT in. There are a few things worth knowing:
 
-As of Version 1.2.0, Obsidian Chat View now supports the WebVTT format! Instead of the regular `chat` header, give your code block the name `chat-webvtt`. Then paste your WebVTT code in there! There are a few things to keep in mind:
+1. Make sure your code starts with `WEBVTT` on the very first line. That's how the format identifies itself.
+2. You can align speakers to the right by adding a `Self:` line in the metadata, right after `WEBVTT` with no blank line in between. List one or more names separated by commas, and every cue from those speakers will sit on the right.
+3. The plugin reads speaker names from voice tags (`<v Speaker Name>...</v>`). A cue without a voice tag still renders, just without a name on it.
+4. `NOTE` blocks become comments, and each cue's timestamp range shows up as its subtext.
 
-1. Please ensure that you are correctly following the WebVTT format. Make sure your code starts with `WEBVTT` on the first line.
-2. You can customize the Chat View by using metadata. **There should be no empty line between the `WEBVTT` and your metadata.**
-3. You may set the `Self` parameter in your metadata to a comma-separated list of names. All chat bubbles from the aforementioned names will appear on the right hand side as opposed to the default, which is left, to indicate that the specified persons' chats are in First-Person.
-4. The plugin only recognizes voice tags (`<v></v>`) in a cue's body. Anything else will be treated as regular text.
-
-Following is an example of a Chat View generated by WebVTT code.
-
+Here's an example:
 ~~~
 ```chat-webvtt
 WEBVTT
-Self: John Smith, fjorn@gmail.com
-MaxWidth: 70
-Header: h3
+Self: Priya Nair
 
-00:00:00.000 --> 00:01:04.270
-<v John Smith>No one touch it, it just works. It is the definition of an absolutely perfect Chat View. Do not defile it! Or else...</v>
+NOTE This transcript was generated automatically. Speaker names may vary.
 
-00:00:05.790 --> 00:00:06.930
-<v John Smith>Going forward, obviously.</v>
+00:00:04.000 --> 00:00:09.500
+<v James Okafor>Before we get into the roadmap, I want to flag that the Q3 retention numbers came in this morning and they are not where we expected them to be.</v>
 
-00:00:04.310 --> 00:00:04.940
-<v Bob Anderson>Uhm?</v>
+00:00:10.100 --> 00:00:17.800
+<v Priya Nair>How far off are we talking? The forecast had us at 91 percent and I have not had a chance to look at the dashboard yet.</v>
 
-00:00:04.310 --> 00:00:04.940
-<v fjorn@gmail.com>Uhm - would be correct! I have no idea what John is talking about!</v>
+00:00:18.200 --> 00:00:26.400
+<v James Okafor>We landed at 87. It is not catastrophic but it is enough that the board will ask questions, and we should have answers ready before Thursday.</v>
+
+00:00:27.000 --> 00:00:34.600
+<v Priya Nair>Understood. Can you send me the cohort breakdown? I want to see whether this is concentrated in the enterprise tier or spread across the board.</v>
+
+00:00:35.200 --> 00:00:40.100
+<v James Okafor>Sending it now. Loop in Sadie from data, she already has the churn attribution model running.</v>
 ```
 ~~~
 
 The above code will generate the following Chat View:
 
-![Chat View WebVTT Preview](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview_preview_webvtt.jpg)
+![Chat View WebVTT Format](images/chat-view-webvtt.png)
 
-## Minimal Mode
+## Zendesk & Customer Support Transcripts
+If you export chat transcripts from Zendesk or a similar support tool, the `chat-zendesk` format will render them for you. Each message looks like `[timestamp] Speaker: message`, and both square `[]` and round `()` brackets are accepted around the timestamp. A few notes:
 
-As of the release of Version 1.2.0, the Chat View plugin now supports minimal mode. You can enable minimal mode by adding the following to the config line of your code block: `{..., mode=minimal}`. This will generate a Chat View with no bubbles and condensed spacing making it look more like a forum thread. The following example shows minimal mode in action:
+1. Add a `'>'` line at the top listing the names you'd like aligned on the right, just like in the `chat` format.
+2. Wrap a line in three stars, like `*** Customer has left the chat ***`, to turn it into a comment.
+3. Any line that doesn't match the transcript format is treated as a comment too, so stray system messages won't break your view.
 
+Here's an example:
 ~~~
-```chat
-{mw=90,mode=minimal}
-[Albus Dumbledore=teal, Minerva McGonagall=pink]
+```chat-zendesk
+> Support Agent
 
-< Albus Dumbledore | I should've known you would have been around Professor McGonagall. Couldn't resist seeing the boy after all, could you? | 25th April 1982 at 2:06 AM
-< Minerva McGonagall | Good evening Professor Dumbledore. Tell me, are the rumors really true? | 25th April 1982 at 2:07 AM
-< Albus Dumbledore | I'm afraid they are professor. Both, the good and the bad. Hagrid is bringing the boy as we speak. | 25th April 1982 at 2:08 AM
+(2:07:14 PM) Customer: Hi there, I placed an order three days ago and the tracking page has not updated since the label was created. It still just says "label printed".
+(2:07:52 PM) Support Agent: Hi! Sorry to hear that. Let me look into it right now. Could you share your order number so I can pull up the details?
+(2:08:10 PM) Customer: Sure, it is #ORD-84921.
+(2:08:34 PM) Support Agent: Thank you. I can see it here. The parcel was collected by the courier yesterday evening, but their system has a 24-hour delay before scans appear publicly. You should see movement by tomorrow morning.
+(2:09:01 PM) Customer: Oh that is a relief, I was worried it had been lost.
+(2:09:28 PM) Support Agent: If the tracking still shows nothing by 3 PM tomorrow, just reply here and we will raise a formal trace with the courier on your behalf.
+*** Customer has left the chat ***
 ```
 ~~~
 
-The code block above will generate the following Chat View:
+The above code will generate the following Chat View:
 
-![Chat View Minimal Mode](https://github.com/adifyr/obsidian-chat-view/raw/master/images/chatview_preview_minimal.jpg)
+![Chat View Zendesk Format](images/chat-view-zendesk.png)
 
-## Markdown & HTML Support In Chat View Message
+## Intercom Conversations
+The `chat-intercom` format renders conversations in the style Intercom exports them. Each message starts with a clock timestamp, then a `'|'`, then the speaker and their message: `HH:MM AM/PM | Speaker: message`. The format has a couple of nice touches:
 
-Following the release of Version 1.3.0 of the Chat View Plugin, the message section of the Chat View now supports HTML and Markdown rendering! Which means you can now include HTML and Markdown elements in your Chat View Message! **Take a look:**
+1. Add a `'>'` line listing the names you'd like on the right, same as the other formats.
+2. A message can run across several lines. Just keep writing on the lines below it (indented or blank-separated) and they'll be folded into the same bubble.
+3. A line wrapped in dashes, like `--- June 7, 2026 ---`, becomes a comment, which is perfect for date separators. A line that's just `---` on its own becomes a delimiter.
 
-![Chat View Markdown & HTML Support](https://github.com/adifyr/obsidian-chat-view/blob/master/images/chatview_preview_md_html.gif)
-
-The above Chat View was generated from the following Code Block:
-
+Here's an example:
 ~~~
-```chat
-[Brian Williams=pink, Stacy Adams=orange]
-{mw=80}
-< Brian Williams | <h6>Pier Trip Suggestions</h6> Hi Stacy, I'm planning to go on a trip to a pier in the state! So, I wanted to ask if you had any suggestions. I have a couple of pre-conditions though: <ul><li>It needs to be a beautiful spot. [So that I can take loads of pics!](https://theculturetrip.com/north-america/usa/california/articles/the-coolest-piers-in-california-from-santa-monica-to-santa-barbara/)</li><li>It needs to be affordable. [This one's kinda expensive.](https://www.tripadvisor.in/Attraction_Review-g60713-d102779-Reviews-Pier_39-San_Francisco_California.html)</li></ul> **So, can you please help me out?** I'll be sure to send over a souvenir. Thanks! | Yesterday at 5:45 PM
-> Stacy Adams | ![Santa Monica Pier](https://images.hdqwalls.com/wallpapers/santa-monica-ferris-wheel-colorful-golden-hour-hz.jpg) <h6>How About Santa Monica?</h6> Jutting out into the Pacific Ocean at the intersection of Ocean and Colorado, it symbolizes the *Heart of Santa Monica* and is one of the most photographed locations in the world. It also has affordable rentals and accomodation! | Today at 10:30 AM
+```chat-intercom
+> Maya Chen
+
+--- June 7, 2026 ---
+10:22 AM | Tobias Reeves: Hey Maya, quick question about the onboarding flow. When a user skips the profile step during signup, do they get prompted again on first login or does it drop them straight into the dashboard?
+10:24 AM | Maya Chen: Good question. Right now they land on the dashboard with a dismissible banner nudging them to complete their profile. We do not force them back to the setup screen.
+10:25 AM | Tobias Reeves: Got it. The reason I ask is that we are seeing a big drop-off in profile completion for users who skip it. Something like 60 percent never come back to fill it in.
+10:26 AM | Maya Chen: That tracks with what I suspected. The banner is too easy to dismiss and forget. I think we should gate one of the key features behind profile completion instead.
+10:27 AM | Tobias Reeves: That makes sense. Which feature were you thinking? It would need to be something they hit early in the session.
+10:28 AM | Maya Chen: Probably the team invite flow. You cannot meaningfully use the product alone, so requiring a complete profile before inviting colleagues feels motivated rather than arbitrary.
 ```
 ~~~
 
-### ⚠️ Important
-Markdown Syntax that covers a full line, such as headers (#), Lists (-), Line Breaks (---) etc. will end up rendering the entire Chat View Message in that format. For such cases, it is recommended to use HTML Tags instead, as has been used in the example above. 
+The above code will generate the following Chat View:
 
----
+![Chat View Intercom Format](images/chat-view-intercom.png)
 
-## Chat Transcripts (Zendesk, Customer Support, CRMs) Support!
+## Upgrading from 1.x
+A few things have changed since the 1.x releases, so here's a quick rundown if you're coming from an older version:
 
-As of Version 1.4.0, Obsidian Chat View now includes a new mode that enables the rendering of Chat Transcripts from Customer Support Platforms such as Zendesk and other CRMs. To use Transcript Mode simply give your code-block the name of `chat-transcript`. Below is an example of the Chat Transcripts format:
-
-```
-(1:38:05 PM) *** Firstname Lastname has joined the chat ***
-(1:38:39 PM) Firstname Lastname: This is the chat-text followed after the time and name.
-(1:40:26 PM) Other-Firstname Other-Lastname: Sure thanks!
-(2:21:29 PM) *** Firstname Lastname has left ***
-```
-
-However, in the plugin, Transcript Mode includes all the same styling & formatting features as other chat modes. It even has delimiters There are a few additions however:
-
-1. The `>` character is now used in the beginning of the code-block to specify which participants should have their Chat View blocks aligned on the left side.
-2. Chat Transcripts supports both `()` and `[]` for its timestamps.
-3. Two kinds of comment formats are allowed in the plugin:
-    a. `(2:21:29 PM) *** Firstname Lastname has left ***` - One with the timestamp and the three stars: `***`
-    b. Any line in the code block that doesn't follow a valid Transcript format (`[Timestamp] Name: Message`), it will also be treated as a comment.
-
-All of this culminates into the kind of Chat View you can see below:
-
-~~~
-```chat-transcript
-> Other-Firstname Other-Lastname
-[Firstname Lastname=blue, Other-Firstname Other-Lastname=pink]
-{header=h4, mw=80}
-
-(1:38:05 PM) *** Firstname Lastname has joined the chat. ***
-(1:38:39 PM) Firstname Lastname: This is the chat-text followed after the time and name.
-...
-[1:40:26 PM] Other-Firstname Other-Lastname: Sure thanks! It's nice to have been able to meet someone who could help me with this.
-Firstname Lastname has left this chat.
-```
-~~~
-
-The above code-block will render the following Chat View:
-
-![Chat View With Transcripts Support](https://user-images.githubusercontent.com/86793553/206829253-6c4da4ff-3537-458d-ab45-c501d1f43262.png)
+- **The default `chat` format is new.** It now uses the `{{header|body|subtext}}` syntax described above. If you'd like your old blocks to keep rendering as they always did, rename them to `chat-old`.
+- **Header colors are automatic now.** Each speaker is assigned a color the first time they appear, so there's no need to set them by hand.
+- **The old `chat-transcript` format is now `chat-zendesk`.** Rename your blocks and they'll render the same way.
+- **The per-block styling options from 1.x are not part of this release.** Header size, max width, minimal mode and manual color config have been set aside while the formats themselves were rebuilt.
 
 ## Thank you for reading!
 
