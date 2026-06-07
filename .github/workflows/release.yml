@@ -24,21 +24,21 @@ jobs:
               id: vars
               run: echo "tag=${{ github.event.release.tag_name || github.event.inputs.tag }}" >> "$GITHUB_OUTPUT"
 
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
               with:
                   ref: ${{ steps.vars.outputs.tag }}
 
-            - name: Use Node.js 20.x
-              uses: actions/setup-node@v4
+            - name: Use Node.js 22.x
+              uses: actions/setup-node@v6
               with:
-                  node-version: 20.x
+                  node-version: 22.x
                   cache: "npm"
 
             - run: npm ci
             - run: npm run build
 
             - name: Generate artifact attestations
-              uses: actions/attest-build-provenance@v2
+              uses: actions/attest-build-provenance@v4
               with:
                   subject-path: |
                       main.js
