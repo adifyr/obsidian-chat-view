@@ -15,7 +15,8 @@ export async function renderChat(app: App, nodes: ChatNode[], el: HTMLElement, c
           "chat-view-message",
           `chat-view-message-${node.side}`,
           ...(isContinued ? ["chat-view-message-continued"] : []),
-        ]
+        ],
+        attr: {dir: "auto"}
       });
       if (node.header.length > 0 && !isContinued) {
         if (!headerColors.has(node.header)) headerColors.set(node.header, colors[headerColors.size % colors.length]!);
@@ -31,7 +32,7 @@ export async function renderChat(app: App, nodes: ChatNode[], el: HTMLElement, c
         messageDiv.createDiv({cls: ["chat-view-subtext"], text: node.subtext});
       }
     } else if (node.kind === "comment") {
-      chatViewDiv.createDiv({cls: ["chat-view-comment"], text: node.body});
+      chatViewDiv.createDiv({cls: ["chat-view-comment"], text: node.body, attr: {dir: "auto"}});
     } else if (node.kind === "delimiter") {
       const delimiter = chatViewDiv.createDiv({cls: ["chat-view-delimiter"]});
       for (let i = 0; i < 3; i++) {
